@@ -58,9 +58,7 @@ export class FacilityService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_upsert_facility`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_upsert_facility`, request)
       .subscribe((value) => {
         response.next(value.status);
       });
@@ -398,9 +396,7 @@ export class FacilityService {
       },
     };
     return this._http
-      .post<any>(`${this.baseUrl}/admin_api_get_owner_list`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_get_owner_list`, request)
       .pipe(map((response) => (response.data ? response.data : [])));
   }
 
@@ -415,9 +411,7 @@ export class FacilityService {
       },
     };
     return this._http
-      .post<any>(`${this.baseUrl}/admin_api_get_street_master`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_get_street_master`, request)
       .pipe(map((response) => (response.data ? response.data : [])));
   }
 
@@ -517,9 +511,7 @@ export class FacilityService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_bulk_facility_update`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_bulk_facility_update`, request)
       .subscribe((value) => {
         response.next(value.status);
       });

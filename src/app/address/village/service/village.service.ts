@@ -101,9 +101,7 @@ export class VillageService {
     if (target_hsc != null) request.TARGET_HSC = target_hsc;
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_upsert_village`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_upsert_village`, request)
       .subscribe(
         (value) => {
           response.next(value.status);

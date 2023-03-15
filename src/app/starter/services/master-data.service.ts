@@ -356,9 +356,7 @@ export class MasterDataService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_get_department_master`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_get_department_master`, request)
       .pipe(
         map((resp) => {
           console.log(
@@ -427,9 +425,7 @@ export class MasterDataService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_get_clinic_master`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_get_clinic_master`, request)
       .pipe(
         map((resp) => {
           console.log(
@@ -497,9 +493,7 @@ export class MasterDataService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_get_clinic_type_master`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_get_clinic_type_master`, request)
       .pipe(
         map((resp) => {
           console.log(
@@ -571,11 +565,8 @@ export class MasterDataService {
 
     this._http
       .post<any>(
-        `${this.baseUrl}/admin_api_get_employee_designation_master`,
-        request,
-        {
-          headers: getHeaders(user.auth_token),
-        }
+        `admin_api_get_employee_designation_master`,
+        request
       )
       .pipe(
         map((resp) => {
@@ -655,9 +646,7 @@ export class MasterDataService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_get_habitation_master`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_get_habitation_master`, request)
       .pipe(
         map((resp) => {
           console.log(
@@ -730,11 +719,8 @@ export class MasterDataService {
 
     this._http
       .post<any>(
-        `${this.baseUrl}/admin_api_get_revenue_village_master`,
-        request,
-        {
-          headers: getHeaders(user.auth_token),
-        }
+        `admin_api_get_revenue_village_master`,
+        request
       )
       .pipe(
         map((resp) => {
@@ -1273,9 +1259,7 @@ export class MasterDataService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_get_state_master`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_get_state_master`, request)
       .pipe(
         map((resp) => {
           console.log("Master-data | Response from API for StateMaster List: " + JSON.stringify(resp))
@@ -1403,11 +1387,8 @@ export class MasterDataService {
 
     this._http
       .post<any>(
-        `${this.baseUrl}/admin_api_get_constituency_assembly_master`,
-        request,
-        {
-          headers: getHeaders(user.auth_token),
-        }
+        `admin_api_get_constituency_assembly_master`,
+        request
       )
       .pipe(
         map((resp) => {
@@ -1482,11 +1463,8 @@ export class MasterDataService {
 
     this._http
       .post<any>(
-        `${this.baseUrl}/admin_api_get_constituency_parliamentary`,
-        request,
-        {
-          headers: getHeaders(user.auth_token),
-        }
+        `admin_api_get_constituency_parliamentary`,
+        request
       )
       .pipe(
         map((resp) => {

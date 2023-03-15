@@ -43,9 +43,7 @@ export class StreetService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_upsert_street`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_upsert_street`, request)
       .subscribe((value) => {
         response.next(value.status);
       });
@@ -83,9 +81,8 @@ export class StreetService {
       },
     };
     return this._http.post<any>(
-      `${this.baseUrl}/admin_api_get_habitation_master`,
-      request,
-      { headers: getHeaders(user.auth_token) }
+      `admin_api_get_habitation_master`,
+      request
     ).pipe(
       map((response) => response.data ? response.data : [])
     );
@@ -201,9 +198,7 @@ export class StreetService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_bulk_street_update`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_bulk_street_update`, request)
       .subscribe((value) => {
         response.next(value.status);
       });

@@ -51,9 +51,7 @@ export class HudService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_upsert_hud`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_upsert_hud`, request)
       .subscribe(
         (value) => {
           response.next(value.status);

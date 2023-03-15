@@ -62,9 +62,7 @@ export class TalukService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_upsert_taluk`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_upsert_taluk`, request)
       .subscribe(
         (value) => {
           response.next(value.status);

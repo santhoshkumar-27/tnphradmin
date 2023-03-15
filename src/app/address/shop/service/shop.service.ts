@@ -27,7 +27,7 @@ export class ShopService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_upsert_shop`, request, { headers:this.getHeaders(user.auth_token) })
+      .post<any>(`admin_api_upsert_shop`, request)
       .subscribe(
         (value)=>{
           response.next(value.status);
@@ -58,7 +58,7 @@ export class ShopService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_get_street_master`, request, { headers:this.getHeaders(user.auth_token) })
+      .post<any>(`admin_api_get_street_master`, request)
       .pipe(
         map((resp) => {
           console.log("Response from API for Street Master: " + JSON.stringify(resp))
@@ -163,7 +163,7 @@ export class ShopService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_bulk_shop_update`, request, { headers:this.getHeaders(user.auth_token) })
+      .post<any>(`admin_api_bulk_shop_update`, request)
       .subscribe(
         (value)=>{
           response.next(value.status);

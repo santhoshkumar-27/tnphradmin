@@ -49,9 +49,8 @@ export class EntityService {
       ...payload,
     };
     return this._http.post<any>(
-      `${this.baseUrl}/admin_api_pre_upsert`,
-      request,
-      { headers: getHeaders(user.auth_token) }
+      `admin_api_pre_upsert`,
+      request
     );
   }
 }

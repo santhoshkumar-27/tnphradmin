@@ -21,8 +21,6 @@ export class ValidationApiService {
 
     console.log('Invoking api.');
     return this._http
-    .post<any>(`${this.baseUrl}/admin_api_get_user_by_mobile`, request, {
-      headers: getHeaders(user.auth_token),
-    });
+    .post<any>(`admin_api_get_user_by_mobile`, request);
   }
 }

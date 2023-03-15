@@ -58,11 +58,8 @@ export class FtpService {
     };
     return this.http
       .post(
-        `${this.baseUrl}/admin_api_get_ftp_street_details`,
-        request,
-        {
-          headers: getHeaders(user.auth_token),
-        }
+        `admin_api_get_ftp_street_details`,
+        request
       )
       .pipe(map((response: any) => (response.data ? response.data : [])));
   }
@@ -76,11 +73,8 @@ export class FtpService {
       STREET_FTP_MAPPINGS: ftpMappings,
     };
     return this.http.post(
-      `${this.baseUrl}/admin_api_upsert_ftp_street_details`,
-      request,
-      {
-        headers: getHeaders(user.auth_token),
-      }
+      `admin_api_upsert_ftp_street_details`,
+      request
     );
   }
 

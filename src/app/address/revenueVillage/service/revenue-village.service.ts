@@ -75,9 +75,7 @@ export class RevenueVillageService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_upsert_rev_village`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_upsert_rev_village`, request)
       .subscribe(
         (value) => {
           response.next(value.status);

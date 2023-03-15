@@ -172,5 +172,198 @@
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_block": {
+      "target": "http://142.132.206.93:8038",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_district": {
+      "target": "http://142.132.206.93:8050",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_hab": {
+      "target": "http://142.132.206.93:8053",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_hud": {
+      "target": "http://142.132.206.93:8000",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_rev_village": {
+      "target": "http://142.132.206.93:8000",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_shop": {
+      "target": "http://142.132.206.93:8000",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_street_master": {
+      "target": "http://142.132.206.93:8037",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_bulk_shop_update": {
+      "target": "http://142.132.206.93:8003",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_street": {
+      "target": "http://142.132.206.93:8000",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_habitation_master": {
+      "target": "http://142.132.206.93:8028",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_bulk_street_update": {
+      "target": "http://142.132.206.93:8004",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_taluk": {
+      "target": "http://142.132.206.93:8000",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_village": {
+      "target": "http://142.132.206.93:8000",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_facility": {
+      "target": "http://142.132.206.93:8051",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_owner_list": {
+      "target": "http://142.132.206.93:8051",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_bulk_facility_update": {
+      "target": "http://142.132.206.93:8002",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_ftp_street_details": {
+      "target": "http://142.132.206.93:8026",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_ftp_street_details": {
+      "target": "http://142.132.206.93:8052",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_validate_gid": {
+      "target": "http://142.132.206.93:8000",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_pre_upsert": {
+      "target": "http://142.132.206.93:8047",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_dashboard_population_aggregates": {
+      "target": "http://142.132.206.93:8007",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_user_by_mobile": {
+      "target": "http://142.132.206.93:8043",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_upsert_user": {
+      "target": "http://142.132.206.93:8080",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_bulk_user_update": {
+      "target": "http://142.132.206.93:8005",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_constituency_parliamentary": {
+      "target": "http://142.132.206.93:8016",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_constituency_assembly_master": {
+      "target": "http://142.132.206.93:8015",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_state_master": {
+      "target": "http://142.132.206.93:8035",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_revenue_village_master": {
+      "target": "http://142.132.206.93:8032",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_employee_designation_master": {
+      "target": "http://142.132.206.93:8032",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_clinic_type_master": {
+      "target": "http://142.132.206.93:8014",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_clinic_master": {
+      "target": "http://142.132.206.93:8013",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    },
+    "/api/v1/admin_api_get_department_master": {
+      "target": "http://142.132.206.93:8017",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
     }
 }
+

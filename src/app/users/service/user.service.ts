@@ -37,9 +37,7 @@ export class UserService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_upsert_user`, request, {
-        headers: this.getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_upsert_user`, request)
       .subscribe((value) => {
         response.next(value.status);
       });
@@ -141,9 +139,7 @@ export class UserService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_bulk_user_update`, request, {
-        headers: this.getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_bulk_user_update`, request)
       .subscribe((value) => {
         response.next(value.status);
       });

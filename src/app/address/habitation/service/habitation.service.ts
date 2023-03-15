@@ -93,9 +93,7 @@ export class HabitationService {
     if (target_hsc != null) request.TARGET_HSC = target_hsc;
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_upsert_hab`, request, {
-        headers: getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_upsert_hab`, request)
       .subscribe(
         (value) => {
           response.next(value.status);

@@ -47,9 +47,7 @@ export class DistrictService {
       };
   
       this._http
-        .post<any>(`${this.baseUrl}/admin_api_upsert_district`, request, {
-          headers: getHeaders(user.auth_token),
-        })
+        .post<any>(`admin_api_upsert_district`, request)
         .subscribe((value) => {
           response.next(value.status);
         }, (error) => {

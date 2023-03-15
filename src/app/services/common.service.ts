@@ -29,9 +29,8 @@ export class CommonService {
       },
     };
     return this._http.post<any>(
-      `${this.baseUrl}/admin_api_validate_gid`,
-      request,
-      { headers: getHeaders(user.auth_token) }
+      `admin_api_validate_gid`,
+      request
     );
   }
 }

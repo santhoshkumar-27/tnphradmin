@@ -207,9 +207,7 @@ export class DashboardService {
     };
 
     this._http
-      .post<any>(`${this.baseUrl}/admin_api_dashboard_population_aggregates`, request, {
-        headers: this.getHeaders(user.auth_token),
-      })
+      .post<any>(`admin_api_dashboard_population_aggregates`, request)
       .pipe(
         map((resp) => {
           console.log("Response from API for Population Aggregate: " + JSON.stringify(resp))
