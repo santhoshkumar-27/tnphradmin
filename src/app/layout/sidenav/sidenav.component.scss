@@ -1,0 +1,45 @@
+app-sidenav {
+  height: 100%;
+  width: 232px;
+  display: flex;
+  //background: #FFFFFF;
+  background: linear-gradient(0deg, #FFEB3B 30%, #FFD600 100%), ;
+
+  mat-nav-list {
+    width: 100%;
+  }
+
+  .hierarchy_mgmt {
+    box-shadow: none !important;
+    background: transparent;
+
+    mat-panel-title {
+      font-size: 16px;
+    }
+
+    mat-expansion-panel-header {
+      padding: 0px 16px;
+    }
+
+    .mat-content {
+      flex: none;
+    }
+
+    .mat-expansion-indicator {
+      height: 25px;
+    }
+
+    .mat-list-item-content {
+      padding: 0px !important;
+      white-space: nowrap;
+
+      .mat-icon {
+        overflow: initial;
+      }
+    }
+
+    .mat-expansion-panel-header.mat-expanded {
+      height: 48px;
+    }
+  }
+}

@@ -1,0 +1,128 @@
+
+@import "src/theme/breakpoints";
+
+app-auth {
+
+    #login {
+        width: 100%;
+        background-size: cover;
+
+        #login-form-wrapper {
+            flex: 1 0 auto;
+
+            @include media-breakpoint('xs') {
+                padding: 16px;
+            }
+
+            #login-form {
+                width: 500px;
+                padding: 32px;
+                text-align: center;
+
+                @include media-breakpoint('xs') {
+                    padding: 0px;
+                    width: 280px;
+                }
+
+                .logo {
+                    margin: 32px auto;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    @include media-breakpoint('xs') {
+                        margin-top: 15px;
+                    }
+
+                    .topbar-separator {
+                        width: 5px;
+                    }
+                }
+
+                .title {
+                    font-size: 20px;
+                    margin: 16px 0 32px 0;
+                    @include media-breakpoint('xs') {
+                        font-size: 18px;
+                    }
+                }
+
+                .error {
+                    font-size: 14px;
+                    margin: 16px 0 32px 0;
+                    color: red;
+                }
+                
+                form {
+                    width: 85%;
+                    margin-left: 7.5%;
+                    margin-right: 7.5%;
+                    padding-top: 32px;
+                    padding-bottom: 16px;
+                    align-self: center;
+
+                    mat-form-field {
+                        width: 70%;
+                    }
+
+                    .submit-button {
+                        width: 50%;
+                        margin: 16px auto;
+                        display: block;
+                        color: FFD600;
+
+                        @include media-breakpoint('xs') {
+                            width: 70%;
+                        }
+                    }
+                }
+
+                .separator {
+                    font-size: 15px;
+                    font-weight: 600;
+                    margin: 24px auto;
+                    position: relative;
+                    overflow: hidden;
+                    width: 100px;
+
+                    .text {
+                        display: inline-flex;
+                        position: relative;
+                        padding: 0 8px;
+                        z-index: 9999;
+
+                        &:before,
+                        &:after {
+                            content: '';
+                            display: block;
+                            width: 30px;
+                            position: absolute;
+                            top: 10px;
+                            border-top: 1px solid;
+                        }
+
+                        &:before {
+                            right: 100%;
+                        }
+
+                        &:after {
+                            left: 100%;
+                        }
+                    }
+                }
+
+                button {
+
+                    @include media-breakpoint('xs') {
+                        width: 80%;
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+.captcha-show .grecaptcha-badge {
+    z-index: 99999 !important;
+    display: block !important;
+}

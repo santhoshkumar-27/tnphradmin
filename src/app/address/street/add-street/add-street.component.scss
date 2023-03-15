@@ -1,0 +1,42 @@
+app-add-street {
+    .header {
+      padding: 10px;
+  
+      .logo-text {
+        //margin: 12px;
+        padding: 3px;
+        font-size: 18px;
+        font-weight: 400;
+        letter-spacing: 0.4px;
+        line-height: normal;
+        vertical-align: middle;
+      }
+    }
+  
+    .content {
+      padding: 10px;
+  
+      form {
+        width: 100%;
+        //max-width: 800px !important;
+        padding: 10px;
+  
+        .progerss-spinner {
+          margin-left: 5px;
+        }
+
+        .checkbox-div {
+          margin-bottom: 14px;
+        }
+      }
+  
+      .form-errors-model {
+        flex: 1;
+  
+        code {
+          background: none !important;
+        }
+      }
+    }
+  }
+  

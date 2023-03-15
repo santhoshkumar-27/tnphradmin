@@ -1,0 +1,348 @@
+<div id="forms" class="page-layout simple fullwidth" fxLayout="column">
+
+    <div class="header primary p-24 h-80" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="logo-text" fxLayout="column" fxLayoutAlign="center start">
+            <div class="h1 mt-16">{{title}} {{gidHeader}}</div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" [routerLink]="'/facility/facilities'">
+            <button mat-icon-button>
+                <mat-icon>keyboard_backspace</mat-icon>
+            </button>
+            <span>Back</span>
+        </div>
+    </div>
+
+    <div class="content p-24">
+
+        <div class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
+
+            <form class="mat-card mat-elevation-z4 p-24 mr-24" fxLayout="column" fxLayoutAlign="start"
+                  fxFlex="1 0 auto" name="form" [formGroup]="facilityDetails">
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Owner</mat-label>
+                        <input type="text"
+                        placeholder="Select Owner"
+                        aria-label="Owner"
+                        matInput
+                        formControlName="owner"
+                        [matAutocomplete]="owner"
+                        (blur)="onOwnerBlur()"
+                        required>
+                        <mat-autocomplete #owner="matAutocomplete" [displayWith]="displayOwnerFn">
+                            <mat-option *ngFor="let owner of filteredOwners | async" [value]="owner">
+                                {{owner.owner_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="facilityDetails.get('owner')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('owner')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Directorate</mat-label>
+                        <input type="text"
+                        placeholder="Select Directorate"
+                        aria-label="Directorate"
+                        matInput
+                        formControlName="directorate"
+                        [matAutocomplete]="directorate"
+                        (blur)="onDirectorateBlur()"
+                        required>
+                        <mat-autocomplete #directorate="matAutocomplete" [displayWith]="displayDirectorateFn">
+                            <mat-option *ngFor="let directorate of filteredDirectorates | async" [value]="directorate">
+                                {{directorate.directorate_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="facilityDetails.get('directorate')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('directorate')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="32">
+                        <mat-label>Category</mat-label>
+                        <input type="text"
+                        placeholder="Select Category"
+                        aria-label="Category"
+                        matInput
+                        formControlName="category"
+                        [matAutocomplete]="category"
+                        (blur)="onCategoryBlur()"
+                        required>
+                        <mat-autocomplete #category="matAutocomplete" [displayWith]="displayCategoryFn">
+                            <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+                                {{category.category_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="facilityDetails.get('category')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('category')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="32">
+                        <mat-label>Type</mat-label>
+                        <input type="text"
+                        placeholder="Select FacilityType"
+                        aria-label="Facility Type"
+                        matInput
+                        formControlName="facility_type"
+                        [matAutocomplete]="facility_type"
+                        (blur)="onFacilityTypeBlur()"
+                        required>
+                        <mat-autocomplete #facility_type="matAutocomplete" [displayWith]="displayTypeFn">
+                            <mat-option *ngFor="let type of filteredTypes | async" [value]="type">
+                                {{type.facility_type_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="facilityDetails.get('type')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('type')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="32">
+                        <mat-label>Level</mat-label>
+                        <input type="text"
+                        placeholder="Select Level"
+                        aria-label="Level"
+                        matInput
+                        formControlName="level"
+                        [matAutocomplete]="level"
+                        (blur)="onLevelBlur()"
+                        required>
+                        <mat-autocomplete #level="matAutocomplete" [displayWith]="displayLevelFn">
+                            <mat-option *ngFor="let level of filteredLevels | async" [value]="level">
+                                {{level.facility_level_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="facilityDetails.get('level')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('level')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>District</mat-label>
+                        <input type="text"
+                        placeholder="Select District"
+                        aria-label="District"
+                        matInput
+                        formControlName="district"
+                        [matAutocomplete]="district"
+                        (blur)="onDistrictBlur()"
+                        >
+                        <mat-autocomplete #district="matAutocomplete" [displayWith]="displayDistrictFn">
+                            <mat-option *ngFor="let district of filteredDistricts | async" [value]="district">
+                                {{district.district_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="facilityDetails.get('district')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('district')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Hud</mat-label>
+                        <input type="text" placeholder="Select Hud" aria-label="hud" matInput formControlName="hud" [matAutocomplete]="hud"
+                            (blur)="onHudBlur()">
+                        <mat-autocomplete #hud="matAutocomplete" [displayWith]="displayHudFn">
+                            <mat-option *ngFor="let hud of filteredHuds | async" [value]="hud">
+                                {{hud.hud_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="facilityDetails.get('hud')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('hud')?.hasError('Selected_Option_Not_In_List')">Select from given options
+                        </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Block</mat-label>
+                        <input type="text"
+                        placeholder="Select Block"
+                        aria-label="Block"
+                        matInput
+                        formControlName="block"
+                        [matAutocomplete]="block"
+                        >
+                        <mat-autocomplete #block="matAutocomplete" [displayWith]="displayBlockFn">
+                            <mat-option *ngFor="let block of filteredBlocks | async" [value]="block">
+                                {{block.block_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="facilityDetails.get('block')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('block')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Facility Name</mat-label>
+                        <input matInput formControlName="facility_name" required>
+                        <mat-error *ngIf="facilityDetails.get('facility_name')?.hasError('required')">
+                            Facility Name is required
+                        </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Parent Facility</mat-label>
+                        <input type="text"
+                        placeholder="Select Parent Facility"
+                        aria-label="Parent Facility"
+                        matInput
+                        formControlName="parent_facility"
+                        [matAutocomplete]="parent_facility"
+                        required>
+                        <mat-autocomplete #parent_facility="matAutocomplete" [displayWith]="displayFacilityFn">
+                            <mat-option *ngFor="let facility of filteredParentFacilities | async" [value]="facility">
+                                {{facility.facility_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="facilityDetails.get('parent_facility')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('parent_facility')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Facility Located Village</mat-label>
+                        <input type="text"
+                        placeholder="Select Village"
+                        aria-label="Level"
+                        matInput
+                        formControlName="village"
+                        [matAutocomplete]="village"
+                        (blur)="onVillageBlur()">
+                        <mat-autocomplete #village="matAutocomplete" [displayWith]="displayVillageFn">
+                            <mat-option *ngFor="let village of filteredVillages | async" [value]="village">
+                                {{village.village_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="facilityDetails.get('village')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('village')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Facility Located Street</mat-label>
+                        <input type="text"
+                        placeholder="Select Street"
+                        aria-label="Street"
+                        matInput
+                        formControlName="street"
+                        [matAutocomplete]="street"
+                        required>
+                        <mat-autocomplete #street="matAutocomplete" [displayWith]="displayStreetFn">
+                            <mat-option *ngFor="let street of filteredStreets | async" [value]="street">
+                                {{street.street_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="facilityDetails.get('street')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('street')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="32">
+                        <mat-label>Facility Incharge Mobile Number</mat-label>
+                        <input matInput formControlName="mobile_number" required>
+                        <mat-error *ngIf="facilityDetails.get('mobile_number')?.hasError('required')">
+                            Mobile number is required
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('mobile_number')?.hasError('minlength') && !facilityDetails.get('mobile_number')?.hasError('required')">
+                            Mobile number should have 10 digits
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('mobile_number')?.hasError('maxlength') && !facilityDetails.get('mobile_number')?.hasError('required')">
+                            Mobile number should have only 10 digits
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('mobile_number')?.hasError('pattern') && !facilityDetails.get('mobile_number')?.hasError('required')">
+                            Mobile number should have only numbers
+                        </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="32">
+                        <mat-label>Landline Number</mat-label>
+                        <input matInput formControlName="landline_number">
+                        <mat-error *ngIf="facilityDetails.get('landline_number')?.hasError('pattern') && !facilityDetails.get('landline_number')?.hasError('required')">
+                            Landline number should have only numbers
+                        </mat-error>
+                        <mat-error *ngIf="facilityDetails.get('landline_number')?.hasError('maxlength') && !facilityDetails.get('landline_number')?.hasError('required')">
+                            Landline number should have maximum 11 digits.
+                        </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="32">
+                        <mat-label>Email</mat-label>
+                        <input matInput formControlName="email">
+                        <mat-error *ngIf="facilityDetails.get('email')?.hasError('required')">Email is required</mat-error>
+                                    <mat-error *ngIf="facilityDetails.get('email')?.hasError('email')">Please enter valid email</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="23">
+                        <mat-label>Latitude</mat-label>
+                        <input matInput formControlName="latitude" required>
+                        <mat-error *ngIf="facilityDetails.get('latitude')?.hasError('required')">Latitude is required</mat-error>
+                        <mat-error *ngIf="facilityDetails.get('latitude')?.hasError('pattern') && !facilityDetails.get('latitude')?.hasError('required')">
+                            Latitude should be in decimal pattern.
+                        </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="3"></div>
+                    <mat-form-field appearance="outline" fxFlex="23">
+                        <mat-label>Longitude</mat-label>
+                        <input matInput formControlName="longitude" required>
+                        <mat-error *ngIf="facilityDetails.get('longitude')?.hasError('required')">Longitude is required</mat-error>
+                        <mat-error *ngIf="facilityDetails.get('longitude')?.hasError('pattern') && !facilityDetails.get('longitude')?.hasError('required')">
+                            Longitude should be in decimal pattern.
+                        </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="3"></div>
+                    <mat-form-field appearance="outline" fxFlex="23">
+                        <mat-label>Whether HWC</mat-label>
+                        <mat-select formControlName="is_hwc">
+                            <mat-option *ngFor="let hwc of hwcOptions" [value]="hwc.name">{{hwc.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div fxFlex="3"></div>
+                    <mat-form-field appearance="outline" fxFlex="22">
+                        <mat-label>Is Active</mat-label>
+                        <mat-select formControlName="active" required>
+                            <mat-option value="Yes">Yes</mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                        <mat-error>Active Status required!</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <button mat-raised-button type="submit" color="primary" (click)="submitForm()" [disabled]="isUnallocated() || isCallInProgress">
+                        Submit
+                    </button>
+                    <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+                </div>                    
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

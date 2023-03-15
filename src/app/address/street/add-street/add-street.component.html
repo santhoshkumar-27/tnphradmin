@@ -1,0 +1,322 @@
+<div id="forms" class="page-layout simple fullwidth" fxLayout="column">
+
+    <div class="header primary p-24 h-80" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="logo-text" fxLayout="column" fxLayoutAlign="center start">
+            <div class="h1 mt-16">{{title}} {{gidHeader}}</div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" [routerLink]="'/addr/streets'">
+            <button mat-icon-button>
+                <mat-icon>keyboard_backspace</mat-icon>
+            </button>
+            <span>Back</span>
+        </div>
+    </div>
+
+    <div class="content p-24">
+
+        <div class="mb-24" fxLayout="column" fxLayoutAlign="start" fxLayout.gt-md="row">
+
+            <form class="mat-card mat-elevation-z4 p-24 mr-24" fxLayout="column" fxLayoutAlign="start"
+                  fxFlex="1 0 auto" name="form" [formGroup]="streetDetails">
+
+                  <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>District</mat-label>
+                        <input type="text"
+                        placeholder="Select District"
+                        aria-label="District"
+                        matInput
+                        formControlName="district"
+                        [matAutocomplete]="district"
+                        (blur)="onDistrictBlur()"
+                        required>
+                        <mat-autocomplete #district="matAutocomplete" [displayWith]="displayDistrictFn">
+                            <mat-option *ngFor="let district of filteredDistricts | async" [value]="district">
+                                {{district.district_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="streetDetails.get('district')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="streetDetails.get('district')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>HUD</mat-label>
+                        <input type="text"
+                        placeholder="Select HUD"
+                        aria-label="HUD"
+                        matInput
+                        formControlName="hud"
+                        [matAutocomplete]="hud"
+                        (blur)="onHudBlur()"
+                        required>
+                        <mat-autocomplete #hud="matAutocomplete" [displayWith]="displayHudFn">
+                            <mat-option *ngFor="let hud of filteredHuds | async" [value]="hud">
+                                {{hud.hud_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="streetDetails.get('hud')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="streetDetails.get('hud')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Block/Zone</mat-label>
+                        <input type="text"
+                        placeholder="Select Block"
+                        aria-label="Block"
+                        matInput
+                        formControlName="block"
+                        [matAutocomplete]="block"
+                        required (blur)="onBlockBlur()">
+                        <mat-autocomplete #block="matAutocomplete" [displayWith]="displayBlockFn">
+                            <mat-option *ngFor="let block of filteredBlocks | async" [value]="block">
+                                {{block.block_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="streetDetails.get('block')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="streetDetails.get('block')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Village/Locality</mat-label>
+                        <input type="text"
+                        placeholder="Select Village"
+                        aria-label="Village"
+                        matInput
+                        formControlName="village"
+                        [matAutocomplete]="village"
+                        required (blur)="onVillageBlur()">
+                        <mat-autocomplete #village="matAutocomplete" [displayWith]="displayVillageFn">
+                            <mat-option *ngFor="let village of filteredVillages | async" [value]="village">
+                                {{village.village_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="streetDetails.get('village')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="streetDetails.get('village')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Habitation</mat-label>
+                        <input type="text"
+                        placeholder="Select Habitation"
+                        aria-label="Block"
+                        matInput
+                        formControlName="habitation"
+                        [matAutocomplete]="habitation"
+                        required>
+                        <mat-autocomplete #habitation="matAutocomplete" [displayWith]="displayHabitationFn">
+                            <mat-option *ngFor="let habitation of filteredHabitations | async" [value]="habitation">
+                                {{habitation.habitation_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="streetDetails.get('habitation')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="streetDetails.get('habitation')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="49">
+                        <mat-label>Street Name</mat-label>
+                        <input matInput formControlName="street" required>
+                        <mat-error *ngIf="streetDetails.get('street')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="24">
+                        <mat-label>Ward</mat-label>
+                        <input matInput formControlName="ward_number" >
+                        <mat-error *ngIf="streetDetails.get('ward_number')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="streetDetails.get('ward_number')?.hasError('pattern')">
+                            Invalid pattern.
+                        </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="1"></div>
+                    <mat-form-field appearance="outline" fxFlex="24">
+                        <mat-label>Latitude</mat-label>
+                        <input matInput formControlName="latitude" >
+                    </mat-form-field>
+                    <div fxFlex="1"></div>
+                    <mat-form-field appearance="outline" fxFlex="24">
+                        <mat-label>Longitude</mat-label>
+                        <input matInput formControlName="longitude" >
+                    </mat-form-field>
+                    <div fxFlex="1"></div>
+                    <mat-form-field appearance="outline" fxFlex="24">
+                        <mat-label>Pincode</mat-label>
+                        <input matInput formControlName="pincode" required>
+                        <mat-error *ngIf="streetDetails.get('pincode')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="32">
+                        <mat-label>Catering Anganwadi</mat-label>
+                        <input type="text"
+                        placeholder="Select Anganwadi"
+                        aria-label="Anganwadi"
+                        matInput
+                        formControlName="anganwadi"
+                        [matAutocomplete]="anganwadi"
+                        required>
+                        <mat-autocomplete #anganwadi="matAutocomplete" [displayWith]="displayAnganwadiFn">
+                            <mat-option *ngFor="let anganwadi of filteredAnganwadis | async" [value]="anganwadi">
+                                {{anganwadi.facility_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="streetDetails.get('anganwadi')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="streetDetails.get('anganwadi')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="32">
+                        <mat-label>Catering HSC</mat-label>
+                        <input type="text"
+                        placeholder="Select Facility"
+                        aria-label="Facility"
+                        matInput
+                        formControlName="facility"
+                        [matAutocomplete]="facility"
+                        required>
+                        <mat-autocomplete #facility="matAutocomplete" [displayWith]="displayFacilityFn">
+                            <mat-option *ngFor="let facility of filteredFacilities | async" [value]="facility">
+                                {{facility.facility_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="streetDetails.get('facility')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="streetDetails.get('facility')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                    <div fxFlex="2"></div>
+                    <mat-form-field appearance="outline" fxFlex="32">
+                        <mat-label>HSC unit</mat-label>
+                        <mat-select formControlName="hsc_unit_name" required>
+                            <mat-option *ngFor="let hscUnit of hscUnits" [value]="hscUnit.value">
+                                {{hscUnit.name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="streetDetails.get('hsc_unit_name')?.hasError('required')">
+                            HSC unit is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="space-evenly center" fxFlex="1 0 auto" class="checkbox-div" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center start">
+                    <div fxFlex="20">
+                        <mat-checkbox color="primary" formControlName="isCoastalArea">Coastal Area</mat-checkbox>
+                    </div>
+                    <div fxFlex="20">
+                        <mat-checkbox color="primary" formControlName="isHillyArea">Hilly Area</mat-checkbox>
+                    </div>
+                    <div fxFlex="20">
+                        <mat-checkbox color="primary" formControlName="isForestArea">Forest Area</mat-checkbox>
+                    </div>
+                    <div fxFlex="20">
+                        <mat-checkbox color="primary" formControlName="isTribalArea">Tribal Area</mat-checkbox>
+                    </div>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                    <mat-form-field appearance="outline" fxFlex="23">
+                        <mat-label>Revenue Village</mat-label>
+                        <input type="text"
+                        placeholder="Select Revenue Village"
+                        aria-label="RevVillage"
+                        matInput
+                        formControlName="revVillage"
+                        [matAutocomplete]="revVillage"
+                        required>
+                        <mat-autocomplete #revVillage="matAutocomplete" [displayWith]="displayRevVillageFn">
+                            <mat-option *ngFor="let revVillage of filteredRevVillages | async" [value]="revVillage">
+                                {{revVillage.rev_village_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="streetDetails.get('revVillage')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                        <mat-error *ngIf="streetDetails.get('revVillage')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                    </mat-form-field>
+                    <div fxFlex="3"></div>
+                    <mat-form-field appearance="outline" fxFlex="23">
+                        <mat-label>Assembly Constituency</mat-label>
+                        <input type="text"
+                        placeholder="Select Assembly Constituency"
+                        aria-label="AssemblyConstituency"
+                        matInput
+                        formControlName="assConstituency"
+                        [matAutocomplete]="assConstituency"
+                        required>
+                        <mat-autocomplete #assConstituency="matAutocomplete" [displayWith]="displayAssemblyConstituencyFn">
+                            <mat-option *ngFor="let assConstituency of filteredAssConstituency | async" [value]="assConstituency">
+                                {{assConstituency.assembly_constituency_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="streetDetails.get('assConstituency')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="3"></div>
+                    <mat-form-field appearance="outline" fxFlex="23">
+                        <mat-label>Parliamentary Constituency</mat-label>
+                        <input type="text"
+                        placeholder="Select Parliamentary Constituency"
+                        aria-label="ParliamentaryConstituency"
+                        matInput
+                        formControlName="parConstituency"
+                        [matAutocomplete]="parConstituency"
+                        required>
+                        <mat-autocomplete #parConstituency="matAutocomplete" [displayWith]="displayParliamentConstituencyFn">
+                            <mat-option *ngFor="let parConstituency of filteredParConstituency | async" [value]="parConstituency">
+                                {{parConstituency.parlimentary_constituency_name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error *ngIf="streetDetails.get('parConstituency')?.hasError('required')">
+                            This field is required.
+                        </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="3"></div>
+                    <mat-form-field appearance="outline" fxFlex="22">
+                        <mat-label>Is Active</mat-label>
+                        <mat-select formControlName="active" required>
+                            <mat-option value="Yes">Yes</mat-option>
+                            <mat-option value="No">No</mat-option>
+                        </mat-select>
+                        <mat-error>Active Status required!</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <button mat-raised-button type="submit" color="primary" (click)="submitForm()" [disabled]="isUnallocated() || isCallInProgress">
+                        Submit
+                    </button>
+                    <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+                </div>                    
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+

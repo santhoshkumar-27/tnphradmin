@@ -1,0 +1,63 @@
+<mat-nav-list>
+  <a mat-list-item [routerLink]="'/dashboard'" (click)="close()">
+    <mat-icon>dashboard</mat-icon> &nbsp;&nbsp; Dashboard
+  </a>
+  <a mat-list-item [routerLink]="'/users/list'" (click)="close()">
+    <mat-icon>people</mat-icon> &nbsp;&nbsp; Users Mgmt.
+  </a>
+  <a *ngIf="showAddress" mat-list-item [routerLink]="'/addr/shops'" (click)="close()">
+    <mat-icon>store</mat-icon> &nbsp;&nbsp; PDS Shop Mgmt.
+  </a>
+  <a *ngIf="showAddress" mat-list-item [routerLink]="'/addr/streets'" (click)="close()">
+    <mat-icon>place</mat-icon> &nbsp;&nbsp; Streets Mgmt.
+  </a>
+  <a mat-list-item [routerLink]="'/facility/facilities'" (click)="close()">
+    <mat-icon>location_city</mat-icon> &nbsp;&nbsp; Facility Mgmt.
+  </a>
+  <a *ngIf="user?.directorate_name == 'DPH' || user?.directorate_name == 'NHM'" mat-list-item [routerLink]="'/ftp'"
+    (click)="close()">
+    <mat-icon>event</mat-icon> &nbsp;&nbsp; FTP Mgmt.
+  </a>
+  <a *ngIf="isNhmAdmin | async">
+    <mat-expansion-panel class="hierarchy_mgmt" (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+      [expanded]="panelOpenState">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>category</mat-icon>&nbsp;&nbsp; <span style="margin-top: 2px;">Hierarchy Mgmt.</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <a mat-list-item [routerLink]="'/addr/districts'" (click)="close()">
+        <mat-icon>density_small</mat-icon> &nbsp;&nbsp; Districts Mgmt.
+      </a>
+      <a mat-list-item [routerLink]="'/addr/hud'" (click)="close()">
+        <mat-icon>local_hospital</mat-icon> &nbsp;&nbsp; HUD Mgmt.
+      </a>
+      <a mat-list-item [routerLink]="'/addr/blocks'" (click)="close()">
+        <mat-icon>view_module</mat-icon> &nbsp;&nbsp; Blocks Mgmt.
+      </a>
+      <a mat-list-item [routerLink]="'/addr/villages'" (click)="close()">
+        <mat-icon>hive</mat-icon> &nbsp;&nbsp; Villages Mgmt.
+      </a>
+      <a mat-list-item [routerLink]="'/addr/habitations'" (click)="close()">
+        <mat-icon>home</mat-icon> &nbsp;&nbsp; Habitation Mgmt.
+      </a>
+      <a mat-list-item [routerLink]="'/addr/taluks'" (click)="close()">
+        <mat-icon>dataset</mat-icon> &nbsp;&nbsp; Taluk Mgmt.
+      </a>
+      <a mat-list-item [routerLink]="'/addr/revenue_village'" (click)="close()">
+        <mat-icon>supervised_user_circle</mat-icon> &nbsp;&nbsp; Revenue Village Mgmt.
+      </a>
+    </mat-expansion-panel>
+  </a>
+
+  <div style="
+      position: absolute;
+      bottom: 10px;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      font-size: 15px;
+    ">
+    v{{ appVersion }}
+  </div>
+</mat-nav-list>

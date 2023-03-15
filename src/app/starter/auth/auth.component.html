@@ -1,0 +1,115 @@
+<div id="login" fxLayout="column">
+  <div id="login-form-wrapper" fxLayout="column" fxLayoutAlign="center center">
+    <div id="login-form">
+      <div class="logo">
+        <h2 fxHide fxShow.gt-xs>TNPHR Web Admin</h2>
+        <div fxLayout="row" fxLayoutAlign="centre center" fxHide fxShow.xs style="margin-bottom: 16px;">
+          <img class="logo-icon" width="50" src="assets/images/DPHLogo.png" />
+          <div class="topbar-separator"></div>
+          <img class="logo-icon" width="50" src="assets/images/NHMLogo.png" />
+          <div class="topbar-separator"></div>
+          <img
+            class="logo-icon"
+            width="50"
+            src="assets/images/TamilNadu_Logo.png"
+          />
+          <div class="topbar-separator"></div>
+          <img class="logo-icon" width="50" src="assets/images/MTM_logo.png" />
+        </div>
+        <img width="120" src="assets/images/UHC_Logo.png" />
+      </div>
+
+      <div class="title">LOGIN TO YOUR ACCOUNT</div>
+
+      <div class="error">{{ error }}</div>
+
+      <form
+        name="loginForm"
+        [formGroup]="loginForm"
+        novalidate
+        class="mat-elevation-z16"
+        *ngIf="!OTPForm"
+      >
+        <mat-form-field appearance="outline">
+          <mat-label>Mobile Number</mat-label>
+          <input matInput formControlName="mobile" />
+          <mat-icon matSuffix class="secondary-text">mobile</mat-icon>
+          <mat-error *ngIf="loginForm.get('mobile')?.hasError('required')">
+            Mobile Number is required
+          </mat-error>
+          <mat-error
+            *ngIf="
+              !loginForm.get('mobile')?.hasError('required') &&
+              loginForm.get('mobile')?.hasError('mobile')
+            "
+          >
+            Please enter a valid 10 digit mobile number
+          </mat-error>
+        </mat-form-field>
+
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <button
+            mat-raised-button
+            color="accent"
+            class="submit-button"
+            aria-label="LOG IN"
+            (click)="loginUser()"
+            [disabled]="loginForm.invalid || isCallInProgress"
+            color="primary"
+          >
+            Send OTP
+          </button>
+          <mat-spinner
+            *ngIf="isCallInProgress"
+            class="progerss-spinner"
+            [diameter]="25"
+          ></mat-spinner>
+        </div>
+      </form>
+
+      <form
+        name="validateOTPForm"
+        [formGroup]="validateOTPForm"
+        novalidate
+        class="mat-elevation-z16"
+        *ngIf="OTPForm"
+      >
+        <mat-form-field appearance="outline">
+          <mat-label>OTP</mat-label>
+          <input matInput formControlName="mobile_otp" />
+          <mat-icon matSuffix class="secondary-text">otp</mat-icon>
+          <mat-error *ngIf="loginForm.get('mobile_otp')?.hasError('required')">
+            One Time Password is required
+          </mat-error>
+          <mat-error
+            *ngIf="
+              !loginForm.get('mobile_otp')?.hasError('required') &&
+              loginForm.get('mobile_otp')?.hasError('mobile_otp')
+            "
+          >
+            Please enter a valid 6 digit OTP
+          </mat-error>
+        </mat-form-field>
+
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <button
+            mat-raised-button
+            color="accent"
+            class="submit-button"
+            aria-label="LOG IN"
+            (click)="validateOTP()"
+            [disabled]="validateOTPForm.invalid || isCallInProgress"
+            color="primary"
+          >
+            Validate OTP & LOGIN
+          </button>
+          <mat-spinner
+            *ngIf="isCallInProgress"
+            class="progerss-spinner"
+            [diameter]="25"
+          ></mat-spinner>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

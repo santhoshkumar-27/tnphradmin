@@ -1,0 +1,125 @@
+<div fxLayout="column">
+    <h2 mat-dialog-title>Edit User Details</h2>
+    <div mat-dialog-content>
+        <form [formGroup]="userDetails" fxLayout="column">
+
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayout.xs="column">
+
+                <mat-form-field appearance="outline" fxFlex="48">
+                    <mat-label>Employee Type</mat-label>
+                    <mat-select formControlName="employee_type">
+                        <mat-option *ngFor="let empType of empTypes" [value]="empType.name">
+                            {{empType.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <div fxFlex="4"></div>
+
+                <mat-form-field appearance="outline" fxFlex="48">
+                    <mat-label>Nature of Work</mat-label>
+                    <mat-select formControlName="nature_of_work">
+                        <mat-option *ngFor="let workNature of workNatures" [value]="workNature.name">
+                            {{workNature.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayout.xs="column">
+
+                <mat-form-field appearance="outline" fxFlex="48">
+                    <mat-label>Role</mat-label>
+                    <input type="text" placeholder="Select Employee Role" aria-label="Employee Role" matInput
+                        formControlName="role" [matAutocomplete]="role" (blur)="onRoleBlur()">
+                    <mat-autocomplete #role="matAutocomplete" [displayWith]="displayRoleFn">
+                        <mat-option *ngFor="let option of filteredEmployeeRoles | async" [value]="option">
+                            {{option.role_name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="userDetails.get('role')?.hasError('Selected_Option_Not_In_List')">
+                        Please select from given options
+                    </mat-error>
+                </mat-form-field>
+
+                <div fxFlex="4"></div>
+
+                <mat-form-field appearance="outline" fxFlex="48">
+                    <mat-label>PHR Role</mat-label>
+                    <input type="text" placeholder="Select PHR Role" aria-label="PHR Role" matInput
+                        formControlName="phr_role" [matAutocomplete]="phrRole" (blur)="onPhrRoleBlur()">
+                    <mat-autocomplete #phrRole="matAutocomplete">
+                        <mat-option *ngFor="let phrRole of phrRoleFiltedOptions | async" [value]="phrRole.name">
+                            {{phrRole.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="userDetails.get('phr_role')?.hasError('Selected_Option_Not_In_List')">
+                        Please select from given options
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+                <mat-form-field appearance="outline" fxFlex="48">
+                    <mat-label>Role in Facility</mat-label>
+                    <input type="text" placeholder="Select Role in facility" aria-label="Facility Role" matInput
+                        formControlName="role_in_facility" [matAutocomplete]="facilityRole">
+                    <mat-autocomplete #facilityRole="matAutocomplete">
+                        <mat-option *ngFor="let option of facilityRoleFilteredOption | async" [value]="option.name">
+                            {{option.name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="userDetails.get('role_in_facility')?.hasError('Selected_Option_Not_In_List')">
+                        Please select from given options
+                    </mat-error>
+                    <mat-error *ngIf="userDetails.hasError('admin_not_allwed_for_phr_user_role')">Cannot add Admin role
+                        for PHR non admin role.</mat-error>
+                    <mat-error *ngIf="userDetails.hasError('user_not_allwed_for_phr_admin_role')">Cannot add User role
+                        for PHR admin role.</mat-error>
+                </mat-form-field>
+
+                <div fxFlex="4"></div>
+
+                <mat-form-field appearance="outline" fxFlex="48">
+                    <mat-label>Primary Facility</mat-label>
+                    <input type="text" placeholder="Select Facility" aria-label="Facility" matInput
+                        formControlName="primary_facility" [matAutocomplete]="primeFacility">
+                    <mat-autocomplete #primeFacility="matAutocomplete" [displayWith]="displayFacilityFn">
+                        <mat-option *ngFor="let facility of primaryFacilityFilteredOptions | async" [value]="facility">
+                            {{facility.facility_name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="userDetails.get('primary_facility')?.hasError('Selected_Option_Not_In_List')">
+                        Please select from given options
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+                <mat-form-field appearance="outline" fxFlex="48">
+                    <mat-label>Is Active</mat-label>
+                    <mat-select formControlName="active">
+                        <mat-option value="Yes">Yes</mat-option>
+                        <mat-option value="No">No</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+
+        </form>
+    </div>
+    <div *ngIf="errMsg" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <mat-error>{{errMsg}}</mat-error>
+    </div>
+    <div mat-dialog-actions>
+        <button type="button" mat-stroked-button mat-dialog-close>Close</button>
+        <button type="submit" mat-flat-button color="primary" (click)="updateUsers()"
+            [disabled]="isCallInProgress">Save</button>
+        <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+    </div>
+</div>

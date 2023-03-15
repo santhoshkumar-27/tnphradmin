@@ -1,0 +1,52 @@
+<div class="modal-container">
+  <h2 mat-dialog-title>Please Confirm</h2>
+  <div mat-dialog-content>
+    <div>The following number of entities in the lower hierarchy will be impacted.
+      <div style="margin: 15px">
+        <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+        <div *ngFor="let entity of message" style="margin: 10px 0px;" fxLayout="row">
+          <span style="text-transform: capitalize;" fxFlex="25">{{entity[0]?.replace('_', ' ')}}</span>
+          <!-- <span> - </span> -->
+          <span>{{entity[1]}}</span>
+        </div>
+      </div>
+      Are you sure you want to continue?
+    </div>
+    <form *ngIf="showCateringHsc" fxLayout="column" [formGroup]="optionsPanel">
+      <div fxFlex="1 0 auto" fxLayout="column">
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <mat-form-field appearance="outline" fxFlex="50">
+            <mat-label>Catering HSC</mat-label>
+            <input type="text" placeholder="Select Catering HSC" aria-label="facility" matInput
+              formControlName="facility" [matAutocomplete]="facility" required />
+            <mat-autocomplete #facility="matAutocomplete" [displayWith]="displayFacilityFn">
+              <mat-option *ngFor="let facility of filteredFacilities | async" [value]="facility">
+                {{ facility.facility_name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="optionsPanel.get('facility')?.hasError('required')">Please select Catering HSC</mat-error>
+            <mat-error *ngIf="optionsPanel.get('facility')?.hasError('Selected_Option_Not_In_List')">Select from given
+              options</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+          <button mat-flat-button type="submit" color="primary" (click)="submitForm()">
+            Yes
+          </button>
+          <div fxFlex="2"></div>
+          <button mat-stroked-button type="button" mat-dialog-close>
+            No
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="!showCateringHsc" mat-dialog-actions>
+    <button mat-flat-button type="button" color="primary" (click)="closeDialog()">
+      Yes
+    </button>
+    <button mat-stroked-button type="button" mat-dialog-close>
+      No
+    </button>
+  </div>
+</div>

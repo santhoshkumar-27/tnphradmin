@@ -1,0 +1,92 @@
+mat-form-field {
+
+
+
+    &.mat-form-field-appearance-outline .mat-form-field-outline {
+        //color: #3f51b5db
+        color: rgb(0 0 0 / 25%);
+    }
+
+    &.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+        // color: #3f51b5db
+        color: rgb(0 0 0 / 0.87);
+    }
+
+    // .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    //     color: #ffc107 !important;
+    // }
+
+    &.mat-form-field-appearance-outline .mat-form-field-outline {
+
+        .mat-form-field-outline-start,
+        .mat-form-field-outline-end,
+        .mat-form-field-outline-gap {
+            border-width: 1.5px;
+        }
+    }
+
+    &.mat-form-field-appearance-outline .mat-form-field-outline.mat-form-field-outline-thick {
+
+        .mat-form-field-outline-start,
+        .mat-form-field-outline-end,
+        .mat-form-field-outline-gap {
+            border-width: 2px;
+        }
+    }
+
+    // &.mat-form-field-appearance-outline .mat-form-field-outline ,
+    // &.mat-form-field-appearance-outline .mat-form-field-outline .mat-form-field-outline-gap {
+    //     border-width: 1.5px;
+    // }
+
+    .mat-input-element {
+        color: #ffc107;
+        font-size: 16px;
+    }
+
+    &.mat-form-field-appearance-outline .mat-form-field-label {
+        top: 1.34375em;
+        margin-top: 0;
+        // color: #35459d;
+        font-size: 16px;
+        color: #ffc107
+    }
+
+    &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+        transform: translateY(-1.4em) scale(0.75);
+        font-size: 18px;
+        font-weight: 500;
+        color:#ffc107;
+    }
+
+    &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label mat-label {
+        transform: translateY(-1.4em) scale(0.75);
+        font-size: 18px;
+        font-weight: 500;
+        border: 10px solid white;
+        background: white;
+        margin-left: -7px;
+        color: #ffc107;
+    }
+
+    &.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-outline {
+        color: rgba(0, 0, 0, 0.25);
+        opacity: 0.3;
+    }
+
+    &.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-label {
+        color: rgba(0, 0, 0, 0.48);
+    }
+
+    .mat-input-element:disabled {
+        color: rgba(0, 0, 0, 0.6);
+    }
+
+}
+
+mat-accordion {
+    .mat-expansion-panel-header-title {
+        font-size: 18px;
+        color: #ffc107;
+    }
+}

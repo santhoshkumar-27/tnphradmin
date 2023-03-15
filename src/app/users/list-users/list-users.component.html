@@ -1,0 +1,430 @@
+<div id="users" class="page-layout carded fullwidth inner-scroll">
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+
+  <!-- CENTER -->
+  <div class="center">
+    <!-- HEADER -->
+    <div
+      class="header accent"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <!-- APP TITLE -->
+      <div
+        class="logo mb-24 mb-md-0"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <mat-icon class="logo-icon s-32 mr-16"> people </mat-icon>
+        <span class="logo-text"> Users Mgmt. (Annexure 10) </span>
+      </div>
+      <!-- / APP TITLE -->
+
+      <!-- ADD BUTTON -->
+      <button
+        mat-raised-button
+        (click)="addUser()"
+        color="primary"
+        class="add-user-button mt-24 mt-md-0"
+        fxShow
+        fxHide.xs
+      >
+        <span>New User</span>
+      </button>
+
+      <button
+        mat-icon-button
+        (click)="addUser()"
+        color="primary"
+        class="add-user-button mt-24 mt-md-0"
+        fxHide
+        fxShow.xs
+        title="Add User"
+      >
+        <mat-icon>person_add</mat-icon>
+      </button>
+      <!-- / ADD BUTTON -->
+    </div>
+    <!-- / HEADER -->
+
+    <!-- Search form. -->
+    <div class="content-card">
+      <mat-accordion>
+        <mat-expansion-panel
+          (opened)="panelOpenState = true"
+          (closed)="panelOpenState = false"
+          [expanded]="panelOpenState"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title> Search Panel </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form fxLayout="column" [formGroup]="searchPanel">
+            <div fxFlex="1 0 auto" fxLayout="column">
+              <div
+                fxLayout="row"
+                fxLayoutAlign="start center"
+                fxFlex="1 0 auto"
+              >
+                <mat-form-field appearance="outline" fxFlex="32">
+                  <mat-label>District</mat-label>
+                  <input
+                    type="text"
+                    placeholder="Select District"
+                    aria-label="District"
+                    matInput
+                    formControlName="district"
+                    [matAutocomplete]="district"
+                    (blur)="onDistrictBlur()"
+                  />
+                  <mat-autocomplete
+                    #district="matAutocomplete"
+                    [displayWith]="displayDistrictFn"
+                  >
+                    <mat-option
+                      *ngFor="let option of filteredDistricts | async"
+                      [value]="option"
+                    >
+                      {{ option.district_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <mat-form-field appearance="outline" fxFlex="32">
+                  <mat-label>Block</mat-label>
+                  <input
+                    type="text"
+                    placeholder="Select Block"
+                    aria-label="Block"
+                    matInput
+                    formControlName="block"
+                    [matAutocomplete]="block"
+                    (blur)="onBlockBlur()"
+                  />
+                  <mat-autocomplete
+                    #block="matAutocomplete"
+                    [displayWith]="displayBlockFn"
+                  >
+                    <mat-option
+                      *ngFor="let option of filteredBlocks | async"
+                      [value]="option"
+                    >
+                      {{ option.block_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <mat-form-field appearance="outline" fxFlex="32">
+                  <mat-label>Facility</mat-label>
+                  <input
+                    type="text"
+                    placeholder="Select Facility"
+                    aria-label="Facility"
+                    matInput
+                    formControlName="facility"
+                    [matAutocomplete]="facility"
+                  />
+                  <mat-autocomplete
+                    #facility="matAutocomplete"
+                    [displayWith]="displayFacilityFn"
+                  >
+                    <mat-option
+                      *ngFor="let option of filteredFacilities | async"
+                      [value]="option"
+                    >
+                      {{ option.facility_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+              <div
+                fxLayout="row"
+                fxLayoutAlign="start center"
+                fxFlex="1 0 auto"
+              >
+                <mat-form-field appearance="outline" fxFlex="32">
+                  <mat-label>PHR Role</mat-label>
+                  <input
+                    type="text"
+                    placeholder="Select PHR Role"
+                    aria-label="phr_role"
+                    matInput
+                    formControlName="phr_role"
+                    [matAutocomplete]="phrRole"
+                  />
+                  <mat-autocomplete #phrRole="matAutocomplete">
+                    <mat-option
+                      *ngFor="let option of filteredPHRRole | async"
+                      [value]="option.name"
+                    >
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <mat-form-field appearance="outline" fxFlex="32">
+                  <mat-label>User Name</mat-label>
+                  <input matInput formControlName="user_name" />
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <mat-form-field appearance="outline" fxFlex="32">
+                  <mat-label>Mobile Number</mat-label>
+                  <input matInput formControlName="mobile_number" />
+                  <mat-error
+                    *ngIf="
+                      searchPanel.get('mobile_number')?.hasError('minlength') &&
+                      !searchPanel.get('mobile_number')?.hasError('required')
+                    "
+                  >
+                    Mobile number should have 10 digits
+                  </mat-error>
+                  <mat-error
+                    *ngIf="
+                      searchPanel.get('mobile_number')?.hasError('maxlength') &&
+                      !searchPanel.get('mobile_number')?.hasError('required')
+                    "
+                  >
+                    Mobile number should have only 10 digits
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div
+                fxLayout="row"
+                fxLayoutAlign="start center"
+                fxFlex="1 0 auto"
+                class="multiselect"
+              >
+                <mat-form-field appearance="outline" fxFlex="62">
+                  <mat-label>Role</mat-label>
+
+                  <mat-chip-list #chipList aria-label="Role selection">
+                    <mat-chip
+                      *ngFor="let role of selectedRole"
+                      (removed)="removeRole(role)"
+                    >
+                      {{ role.role_name }}
+                      <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip>
+                    <input
+                      placeholder="Select Employee Role"
+                      matInput
+                      #roleInput
+                      formControlName="role"
+                      [matAutocomplete]="role"
+                      [matChipInputFor]="chipList"
+                      (focus)="resetFilteredEmployeeRoles()"
+                    />
+                  </mat-chip-list>
+
+                  <mat-autocomplete #role="matAutocomplete">
+                    <mat-option
+                      *ngFor="let option of filteredEmployeeRoles | async"
+                      [value]="option"
+                    >
+                      <mat-checkbox
+                        [checked]="option.selected"
+                        (change)="selectRoles($event, option)"
+                        (click)="$event.stopPropagation()"
+                        style="width: 100%; height: 100%"
+                      >
+                        {{ option.role_name }}
+                      </mat-checkbox>
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center">
+              <button
+                mat-raised-button
+                type="button"
+                color="primary"
+                (click)="clearSearchFields()"
+                [disabled]="isCallInProgress"
+              >
+                Clear
+              </button>
+              <div fxFlex="2"></div>
+              <button
+                mat-raised-button
+                type="button"
+                color="primary"
+                (click)="getFilteredUserList()"
+                [disabled]="isCallInProgress"
+              >
+                Search
+              </button>
+              <div fxFlex="2"></div>
+              <mat-spinner
+                *ngIf="isCallInProgress"
+                class="progerss-spinner"
+                [diameter]="25"
+              ></mat-spinner>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 10px 45px 10px 15px;background: #fff;">
+      <div>
+        <button *ngIf="selection.hasValue()" mat-icon-button type="button" color="primary" (click)="bulkEdit()">
+          <mat-icon class="mr-16">create</mat-icon>
+        </button>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <button [disabled]="isExportInProgress" mat-icon-button type="button" color="primary" (click)="downloadRecords()"
+          style="font-size: 16px">
+          <mat-icon>save_alt</mat-icon>
+          <span style="padding: 5px;">Export</span>
+        </button>
+        <mat-spinner *ngIf="isExportInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+      <div class="users-table">
+        <table mat-table #table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox color="primary" (click)="$event.stopPropagation()"
+                (change)="$event ? selection.toggle(row.user_id) : null" [checked]="selection.isSelected(row.user_id)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="district_id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>District</th>
+            <td mat-cell *matCellDef="let user">
+              <p class="text-truncate">
+                {{ user.district_id | districtIdToName | async }}
+              </p>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="block_id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Block</th>
+            <td mat-cell *matCellDef="let user">
+              <p class="text-truncate">
+                {{ user.block_id | blockIdToName | async }}
+              </p>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="facilty_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Facility</th>
+            <td mat-cell *matCellDef="let user">
+              <p class="text-truncate">{{ user.facility_name }}</p>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="user_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let user">
+              <p class="text-truncate">
+                {{ user.user_first_name }} {{ user.user_last_name }}
+              </p>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="mobile_number">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Mobile</th>
+            <td mat-cell *matCellDef="let user">
+              <p class="text-truncate">{{ user.mobile_number }}</p>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="phr_role">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>PHR Role</th>
+            <td mat-cell *matCellDef="let user">
+              <p class="text-truncate">{{ user.phr_role }}</p>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="isActive">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              fxHide
+              fxShow.gt-xs
+            >
+              Active
+            </th>
+            <td mat-cell *matCellDef="let user" fxHide fxShow.gt-xs>
+              <mat-icon *ngIf="user.active" class="active-icon green-600 s-16"
+                >check</mat-icon
+              >
+              <mat-icon *ngIf="!user.active" class="active-icon red-500 s-16"
+                >close</mat-icon
+              >
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              fxHide
+              fxShow.gt-xs
+            >
+              Edit
+            </th>
+            <td mat-cell *matCellDef="let data" fxHide fxShow.gt-xs>
+              <button
+                mat-icon-button
+                type="button"
+                color="primary"
+                (click)="editUser(data)"
+              >
+                <mat-icon class="mr-16">create</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            class="user"
+          ></tr>
+
+          <!--mat-row *matRowDef="let user; columns: displayedColumns;"
+                         class="user"
+                         matRipple
+                         [routerLink]="'/apps/e-commerce/users/'+user.id+'/'+user.handle">
+                </mat-row-->
+        </table>
+      </div>
+      <p style="text-align: center" *ngIf="paginator.length === 0">
+        No records found
+      </p>
+      <mat-divider></mat-divider>
+
+      <mat-paginator
+        #paginator
+        [pageIndex]="0"
+        [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 25, 100]"
+      >
+      </mat-paginator>
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>

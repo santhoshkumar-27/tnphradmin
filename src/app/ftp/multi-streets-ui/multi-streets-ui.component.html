@@ -1,0 +1,68 @@
+<div *ngIf="streets?.length == 1" class="multi_street">
+  {{ streets[0].street_name }}
+</div>
+
+<div *ngIf="streets?.length > 1" fxLayout>
+    <div
+      *ngFor="let str of streets; let i = index"
+      [ngStyle]="{
+        width: 100 / streets.length + '%',
+        overflow: 'hidden',
+        'margin-right': '5px',
+        color: COLOURS[i],
+        border: 'solid 1px'+ COLOURS[i],
+        borderRadius: '5px',
+        padding: '2px 0px'
+      }"
+      title="{{ str.street_name }}"
+    >
+      {{ str.street_name }}
+    </div>
+  </div>
+
+
+<!-- <div *ngIf="streets?.length == 2" fxLayout>
+  <div
+    *ngFor="let str of streets; let i = index"
+    [ngStyle]="{
+      'margin-right': '5px',
+      color: COLOURS[i],
+      border: 'solid 1px'+ COLOURS[i],
+      borderRadius: '5px',
+      padding: '2px'
+    }"
+    title="{{ str.street_name }}"
+  >
+    {{ str.street_name.substr(0, 4) }}
+  </div>
+</div>
+<div *ngIf="streets?.length == 3" fxLayout>
+  <div
+    *ngFor="let str of streets; let i = index"
+    [ngStyle]="{
+      'margin-right': '5px',
+      color: COLOURS[i],
+      border: 'solid 1px'+ COLOURS[i],
+      borderRadius: '5px',
+      padding: '2px'
+    }"
+    title="{{ str.street_name }}"
+  >
+    {{ str.street_name.substr(0, 2) }}
+  </div>
+</div>
+<div *ngIf="streets?.length > 3" fxLayout>
+  <div
+    *ngFor="let str of streets; let i = index"
+    [ngStyle]="{
+      'margin': '0px 1px',
+      color: COLOURS[i],
+      border: 'solid 1px'+ COLOURS[i],
+      borderRadius: '5px',
+      padding: '2px'
+    }"
+    title="{{ str.street_name }}"
+  >
+    {{ str.street_name.charAt(0) }}
+  </div>
+</div> -->

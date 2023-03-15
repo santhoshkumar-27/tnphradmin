@@ -1,0 +1,11 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+/* ======== Angular material custom themes ======== */ 
+$phr-theme-primary: mat-palette($mat-amber);
+$phr-theme-accent: mat-palette($mat-yellow, 100, 500, A100);
+$phr-theme-warn: mat-palette($mat-red);
+
+$phr-theme: mat-light-theme($phr-theme-primary, $phr-theme-accent, $phr-theme-warn);
+
+@include angular-material-theme($phr-theme);

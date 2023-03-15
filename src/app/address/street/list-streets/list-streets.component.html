@@ -1,0 +1,281 @@
+<div id="streets" class="page-layout carded fullwidth inner-scroll">
+  <!-- CENTER -->
+  <div class="center">
+    <!-- HEADER -->
+    <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+      <!-- APP TITLE -->
+      <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="logo-icon s-32 mr-16"> place </mat-icon>
+        <span class="logo-text"> Streets Mgmt. </span>
+      </div>
+      <!-- / APP TITLE -->
+
+      <!-- ADD BUTTON -->
+      <ng-container>
+        <button mat-raised-button (click)="addStreet()" color="primary" class="add-shop-button mt-24 mt-md-0" fxShow
+          fxHide.xs>
+          <span>New Street</span>
+        </button>
+        <button title="New Street" mat-icon-button (click)="addStreet()" color="primary"
+          class="add-shop-button mt-24 mt-md-0" fxHide fxShow.xs>
+          <mat-icon>add_location</mat-icon>
+        </button>
+      </ng-container>
+      <!-- / ADD BUTTON -->
+    </div>
+    <!-- / HEADER -->
+
+    <!-- Search form. -->
+    <div class="content-card">
+      <mat-accordion>
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+          [expanded]="panelOpenState">
+          <mat-expansion-panel-header>
+            <mat-panel-title> Search Panel </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form fxLayout="column" [formGroup]="searchPanel">
+            <!-- TODO change all below to dropdown -->
+            <div fxFlex="1 0 auto" fxLayout="column">
+              <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field appearance="outline" fxFlex="49">
+                  <mat-label>District</mat-label>
+                  <input type="text" placeholder="Select District" aria-label="District" matInput
+                    formControlName="district" (blur)="onDistrictBlur()" [matAutocomplete]="district" />
+                  <mat-autocomplete #district="matAutocomplete" [displayWith]="displayDistrictFn">
+                    <mat-option *ngFor="let option of filteredDistricts | async" [value]="option">
+                      {{ option.district_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      searchPanel
+                        .get('district')
+                        ?.hasError('Selected_Option_Not_In_List')
+                    ">Select from given options</mat-error>
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <mat-form-field appearance="outline" fxFlex="49">
+                  <mat-label>Block</mat-label>
+                  <input type="text" placeholder="Select Block" aria-label="Block" matInput formControlName="block"
+                    [matAutocomplete]="block" (blur)="onBlockBlur()" />
+                  <mat-autocomplete #block="matAutocomplete" [displayWith]="displayBlockFn">
+                    <mat-option *ngFor="let option of filteredBlocks | async" [value]="option">
+                      {{ option.block_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      searchPanel
+                        .get('block')
+                        ?.hasError('Selected_Option_Not_In_List')
+                    ">Select from given options</mat-error>
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field appearance="outline" fxFlex="49">
+                  <mat-label>Village</mat-label>
+                  <input type="text" placeholder="Select Village" aria-label="Village" matInput
+                    formControlName="village" [matAutocomplete]="village" (blur)="onVillageBlur()" />
+                  <mat-autocomplete #village="matAutocomplete" [displayWith]="displayVillageFn">
+                    <mat-option *ngFor="let option of filteredVillages | async" [value]="option">
+                      {{ option.village_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      searchPanel
+                        .get('village')
+                        ?.hasError('Selected_Option_Not_In_List')
+                    ">Select from given options</mat-error>
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <mat-form-field appearance="outline" fxFlex="49">
+                  <mat-label>Habitation</mat-label>
+                  <input type="text" placeholder="Select Habitation" aria-label="Habitation" matInput
+                    formControlName="habitation" [matAutocomplete]="habitation" />
+                  <mat-autocomplete #habitation="matAutocomplete" [displayWith]="displayHabitationFn">
+                    <mat-option *ngFor="let option of filteredHabitations | async" [value]="option">
+                      {{ option.habitation_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      searchPanel
+                        .get('habitation')
+                        ?.hasError('Selected_Option_Not_In_List')
+                    ">Select from given options</mat-error>
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field appearance="outline" fxFlex="49">
+                  <mat-label>Catering HSC</mat-label>
+                  <input type="text" placeholder="Catering HSC" aria-label="Facility" matInput
+                    formControlName="facility" [matAutocomplete]="facility" />
+                  <mat-autocomplete #facility="matAutocomplete" [displayWith]="displayFacilityFn">
+                    <mat-option *ngFor="let option of filteredFacilities | async" [value]="option">
+                      {{ option.facility_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="
+                      searchPanel
+                        .get('facility')
+                        ?.hasError('Selected_Option_Not_In_List')
+                    ">Select from given options</mat-error>
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <mat-form-field appearance="outline" fxFlex="49">
+                  <mat-label>Street Name</mat-label>
+                  <input matInput formControlName="street_name" />
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                <mat-form-field appearance="outline" fxFlex="49">
+                  <mat-label>Street GID</mat-label>
+                  <input matInput formControlName="street_gid" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="center center">
+              <button [disabled]="isCallInProgress" mat-raised-button type="button" color="primary"
+                (click)="clearSearchFields()">
+                Clear
+              </button>
+              <div fxFlex="2"></div>
+              <button [disabled]="isCallInProgress" mat-raised-button type="button" color="primary"
+                (click)="getFilteredStreetList()">
+                Search
+              </button>
+              <div fxFlex="2"></div>
+              <mat-spinner
+                *ngIf="isCallInProgress"
+                class="progerss-spinner"
+                [diameter]="25"
+              ></mat-spinner>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 10px 45px 10px 15px;background: #fff;">
+      <div>
+        <button *ngIf="selection.hasValue()" mat-icon-button type="button" color="primary" (click)="bulkEdit()">
+          <mat-icon class="mr-16">create</mat-icon>
+        </button>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <button [disabled]="isExportInProgress" mat-icon-button type="button" color="primary"
+          (click)="downloadRecords()" style="font-size: 16px">
+          <mat-icon>save_alt</mat-icon>
+          <span style="padding: 5px;">Export</span>
+        </button>
+        <mat-spinner *ngIf="isExportInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+    <!-- CONTENT CARD -->
+    <div class="content-card">
+      <div class="streets-table">
+        <table mat-table #table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                [checked]="selection.hasValue() && isAllSelected()" [disabled]="disableMasterToggle()"
+                style="margin-right: 10px;">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox color="primary" (click)="$event.stopPropagation()"
+                (change)="$event ? storeSelectedStreets(row) : null" [checked]="selection.isSelected(row.street_id)"
+                [disabled]="disableEdit(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="district">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>District</th>
+            <td mat-cell *matCellDef="let street">
+              <span class="text-truncate">{{ street.district_name }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="hud">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>HUD</th>
+            <td mat-cell *matCellDef="let street">
+              <span class="text-truncate">{{ street.hud_name }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="block">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Block</th>
+            <td mat-cell *matCellDef="let street">
+              <span class="text-truncate">{{ street.block_name }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="village">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Village</th>
+            <td mat-cell *matCellDef="let street">
+              <span class="text-truncate">{{ street.village_name }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="habitation">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Habitation
+            </th>
+            <td mat-cell *matCellDef="let street">
+              <span class="text-truncate">{{ street.habitation_name }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="street">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Street</th>
+            <td mat-cell *matCellDef="let street">
+              <span class="text-truncate">{{ street.street_name }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="cateringHsc">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Catering HSC
+            </th>
+            <td mat-cell *matCellDef="let street">
+              <span class="text-truncate">{{ street.facility_name }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="isActive">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>
+              Active
+            </th>
+            <td mat-cell *matCellDef="let street" fxHide fxShow.gt-xs>
+              <mat-icon *ngIf="street.active" class="active-icon green-600 s-16">check</mat-icon>
+              <mat-icon *ngIf="!street.active" class="active-icon red-500 s-16">close</mat-icon>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>
+              Edit
+            </th>
+            <td mat-cell *matCellDef="let data" fxHide fxShow.gt-xs>
+              <button
+                mat-icon-button
+                type="button"
+                color="primary"
+                (click)="editStreet(data)"
+                [disabled]="disableEdit(data)"
+              >
+                <mat-icon class="mr-16">create</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" class="street"></tr>
+        </table>
+      </div>
+      <p style="text-align: center" *ngIf="paginator.length === 0">
+        No records found
+      </p>
+      <mat-divider></mat-divider>
+      <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+      </mat-paginator>
+    </div>
+    <!-- / CONTENT CARD -->
+  </div>
+  <!-- / CENTER -->
+</div>

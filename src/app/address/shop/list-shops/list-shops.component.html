@@ -1,0 +1,214 @@
+<div id="shops" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16">
+                    store
+                </mat-icon>
+                <span class="logo-text">
+                    PDS Shops Mgmt. (Annexure 4)
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- SEARCH -->
+            <!--div class="search-wrapper mx-32 mx-md-0">
+                <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <mat-icon>Filter</mat-icon>
+                    <input #filter placeholder="Please enter filter value" (keyup)="applyFilter($event)">
+                </div>
+            </div-->
+            <!-- / SEARCH -->
+
+            <!-- ADD BUTTON -->
+            <ng-container *ngIf="user.phr_role === 'WEB_STATE_ADMIN' || user.phr_role === 'STATE_ADMIN'">
+                <button mat-raised-button (click)="addShop()" color="primary" class="add-shop-button mt-24 mt-md-0"
+                    fxShow fxHide.xs>
+                    <span>New Shop</span>
+                </button>
+                <button mat-icon-button (click)="addShop()" color="primary" class="add-shop-button mt-24 mt-md-0" fxHide
+                    fxShow.xs>
+                    <mat-icon style="font-size: 18px;">add</mat-icon>
+                    <mat-icon>store</mat-icon>
+                </button>
+            </ng-container>
+            <!-- / ADD BUTTON -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- Search form. -->
+        <div class="content-card">
+            <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+                    [expanded]="panelOpenState">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Search Panel
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <form fxLayout="column" [formGroup]="searchPanel">
+                        <div fxFlex="1 0 auto" fxLayout="column">
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                <mat-form-field appearance="outline" fxFlex="49">
+                                    <mat-label>District</mat-label>
+                                    <input matInput formControlName="district">
+                                </mat-form-field>
+                                <div fxFlex="2"></div>
+                                <mat-form-field appearance="outline" fxFlex="49">
+                                    <mat-label>Taluk</mat-label>
+                                    <input matInput formControlName="taluk">
+                                </mat-form-field>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                <mat-form-field appearance="outline" fxFlex="49">
+                                    <mat-label>Shop Name</mat-label>
+                                    <input matInput formControlName="shop_name">
+                                </mat-form-field>
+                                <div fxFlex="2"></div>
+                                <mat-form-field appearance="outline" fxFlex="49">
+                                    <mat-label>Shop Code</mat-label>
+                                    <input matInput formControlName="shop_code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                            <button [disabled]="isCallInProgress" mat-raised-button type="button" color="primary"
+                                (click)="clearSearchFields()">
+                                Clear
+                            </button>
+                            <div fxFlex="2"></div>
+                            <button [disabled]="isCallInProgress" mat-raised-button type="button" color="primary"
+                                (click)="getFilteredShopList()">
+                                Search
+                            </button>
+                            <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+                        </div>
+                    </form>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
+            <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 10px 45px 10px 15px;background: #fff;">
+                <div>
+                    <button *ngIf="selection.hasValue()" mat-icon-button type="button" color="primary" (click)="bulkEdit()">
+                        <mat-icon class="mr-16">create</mat-icon>
+                    </button>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <button [disabled]="isExportInProgress" mat-icon-button type="button" color="primary"
+                        (click)="downloadRecords()" style="font-size: 16px">
+                        <mat-icon>save_alt</mat-icon>
+                        <span style="padding: 5px;">Export</span>
+                    </button>
+                    <mat-spinner *ngIf="isExportInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+                </div>
+            </div>
+            
+            <mat-divider></mat-divider>
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+            <div class="shops-table">
+                <table mat-table #table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()" [disabled]="disableMasterToggle()">
+                            </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox color="primary" (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row.shop_id) : null" [checked]="selection.isSelected(row.shop_id)"
+                                [disabled]="disableEdit(row)">
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="district">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>District</th>
+                        <td mat-cell *matCellDef="let shop">
+                            <span class="text-truncate">{{shop.district}}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="taluk">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Taluk</th>
+                        <td mat-cell *matCellDef="let shop">
+                            <span class="text-truncate">{{shop.taluk}}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="shop_name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Shop Name</th>
+                        <td mat-cell *matCellDef="let shop">
+                            <span class="text-truncate">{{shop.shop_name}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="shop_code">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Shop Code</th>
+                        <td mat-cell *matCellDef="let shop">
+                            <span class="text-truncate">{{shop.shop_code}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="street_name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Street Name</th>
+                        <td mat-cell *matCellDef="let shop">
+                            <span class="text-truncate">{{shop.street_name}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="village">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Village</th>
+                        <td mat-cell *matCellDef="let shop">
+                            <span class="text-truncate">{{shop.village}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="isActive">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>
+                            Active
+                        </th>
+                        <td mat-cell *matCellDef="let shop" fxHide fxShow.gt-xs>
+                            <mat-icon *ngIf="shop.active" class="active-icon green-600 s-16">check</mat-icon>
+                            <mat-icon *ngIf="!shop.active" class="active-icon red-500 s-16">close</mat-icon>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Edit</th>
+                        <td mat-cell *matCellDef="let data" fxHide fxShow.gt-xs>
+                            <button mat-icon-button type="button" color="primary" (click)="editShop(data)" [disabled]="disableEdit(data)">
+                                <mat-icon class="mr-16">create</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="shop"></tr>
+
+                    <!--mat-row *matRowDef="let shop; columns: displayedColumns;"
+                            class="shop"
+                            matRipple
+                            [routerLink]="'/apps/e-commerce/shops/'+shop.id+'/'+shop.handle">
+                    </mat-row-->
+
+                </table>
+            </div>
+            <p style="text-align:center;" *ngIf="paginator.length === 0">No records found</p>
+            <mat-divider></mat-divider>
+
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+            <!--<mat-paginator #paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>-->
+            <mat-divider></mat-divider>
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>

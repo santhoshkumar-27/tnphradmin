@@ -1,0 +1,248 @@
+//creating an object to bind the street mappings to ui
+//split - to enter the split mode (each cell will be divided into two halfs)
+//view - to specify view mode (displaying already existing ftp mappings)
+//unit - to hold the selected unit from unit dropdown
+//streets - to hold the selected streets from street dropdown
+//filteredStreets - filtered streets based on unit value
+// unit, streets, filteredStreets will have two elements(0 for split area1 and 1 for split area2)
+
+export const getModelObject = () => {
+  const objToRenderUi: any = {
+    'week-1': {
+      Monday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Tuesday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Wednesday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Thursday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Friday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Saturday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Sunday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+    },
+
+    'week-2': {
+      Monday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Tuesday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Wednesday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Thursday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Friday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Saturday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Sunday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+    },
+
+    'week-3': {
+      Monday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Tuesday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Wednesday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Thursday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Friday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Saturday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Sunday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+    },
+
+    'week-4': {
+      Monday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Tuesday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Wednesday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Thursday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Friday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Saturday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+      Sunday: {
+        split: false,
+        unit: [],
+        filteredStreets: [],
+        streets: [[], []],
+        view: false,
+        isHoliday: false,
+      },
+    },
+  };
+  return objToRenderUi;
+};

@@ -1,0 +1,35 @@
+@import "src/theme/breakpoints.scss";
+
+#ftp_mgmt {
+  .top-bg {
+    @include media-breakpoint("lt-md") {
+      height: 256px;
+    }
+  }
+  > .center {
+    > .header {
+      padding: 10px;
+
+      .logo {
+        display: flex;
+        align-items: center;
+
+        .logo-icon {
+          //margin-top: 5rem;
+          width: 38px;
+          padding-top: -1rem;
+        }
+
+        .logo-text {
+          //margin: 12px;
+          padding: 3px;
+          font-size: 18px;
+          font-weight: 400;
+          letter-spacing: 0.4px;
+          line-height: normal;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}

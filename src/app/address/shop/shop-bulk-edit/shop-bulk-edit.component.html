@@ -1,0 +1,24 @@
+<div mat-dialog-title>Edit Shop Details</div>
+<div mat-dialog-content>
+    <form [formGroup]="shopDetails" fxLayout="column">
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field appearance="outline" fxFlex="49">
+                <mat-label>Is Active</mat-label>
+                <mat-select formControlName="active" required>
+                    <mat-option value="Yes">Yes</mat-option>
+                    <mat-option value="No">No</mat-option>
+                </mat-select>
+                <mat-error>Active Status required!</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start center" style="margin-top: 10px;">
+            <button type="button" mat-stroked-button mat-dialog-close [disabled]="isCallInProgress">Cancel</button>
+            <div fxFlex="2"></div>
+            <button type="submit" mat-flat-button color="primary" (click)="updateShops()"
+                [disabled]="isCallInProgress">Save</button>
+            <div fxFlex="2"></div>
+            <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+        </div>
+    </form>
+</div>

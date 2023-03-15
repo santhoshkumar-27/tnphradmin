@@ -1,0 +1,339 @@
+import { Component, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+//import { MatPaginator } from '@angular/material/paginator';
+//import { MatPaginator } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { Router } from '@angular/router';
+import { tap } from 'rxjs/operators';
+import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/starter/services/auth.service';
+
+import { Shop } from '../../../models/shop';
+import { ShopService } from '../service/shop.service';
+import { ShopDataSource } from './shop.datasource';
+import { exportToExcel } from '../../../utils/exportToExcel.util';
+import { isBlockAdmin } from 'src/app/utils/session.util';
+import { MatDialog } from '@angular/material/dialog';
+import { SelectionModel } from '@angular/cdk/collections';
+import { ShopBulkEditComponent } from '../shop-bulk-edit/shop-bulk-edit.component';
+import { disableEdit } from 'src/app/utils/unallocated.util';
+
+@Component({
+  selector: 'app-list-shops',
+  templateUrl: './list-shops.component.html',
+  styleUrls: ['./list-shops.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+})
+export class ListShopsComponent implements AfterViewInit, OnInit {
+  displayedColumns: string[] = [
+    'select',
+    'district',
+    'taluk',
+    'village',
+    'shop_name',
+    'shop_code',
+    'street_name',
+    'isActive',
+    'actions',
+  ];
+  shop: Shop;
+  dataSource: ShopDataSource;
+  filters = {
+    DISTRICT: null,
+    TALUK: null,
+    SHOP_NAME: null,
+    SHOP_CODE: null,
+  };
+
+  @ViewChild(MatPaginator, { static: false })
+  paginator: MatPaginator;
+
+  searchPanel: FormGroup;
+  panelOpenState = true;
+  isCallInProgress = false;
+
+  user: User;
+
+  selection = new SelectionModel<any>(true, []);
+
+  isExportInProgress: boolean = false;
+
+  constructor(
+    private shopService: ShopService,
+    private _authService: AuthService,
+    private _formBuilder: FormBuilder,
+    private _router: Router,
+    private dialog: MatDialog
+  ) {}
+
+  ngOnInit(): void {
+    this._authService.currentUser.subscribe((user) => {
+      this.user = user;
+    });
+
+    this.dataSource = new ShopDataSource(this.shopService);
+
+    this.searchPanel = this._formBuilder.group({
+      district: ['', Validators.pattern('[a-zA-Z .()-]*')],
+      taluk: ['', Validators.pattern('[a-zA-Z !()-]*')],
+      shop_name: ['', Validators.pattern('[0-9a-zA-Z .!()-]*')],
+      shop_code: ['', Validators.pattern('[0-9A-z]*')],
+    });
+
+    let shop_filters: any = sessionStorage.getItem('shop_filters');
+    if (shop_filters) {
+      shop_filters = JSON.parse(shop_filters);
+      const { DISTRICT, TALUK, SHOP_NAME, SHOP_CODE } = shop_filters;
+      this.filters = {
+        DISTRICT: DISTRICT,
+        TALUK: TALUK,
+        SHOP_NAME: SHOP_NAME,
+        SHOP_CODE: SHOP_CODE,
+      };
+      this.searchPanel.patchValue({
+        district: DISTRICT,
+        taluk: TALUK,
+        shop_name: SHOP_NAME,
+        shop_code: SHOP_CODE,
+      });
+    }
+
+    if (this.user && isBlockAdmin(this.user)) {
+      let userDistrictId: any = this.user.district_id;
+      this.shopService.getDistrictName(userDistrictId).then((disName: any) => {
+        this.searchPanel.get('district')?.setValue(disName);
+        this.searchPanel.get('district')?.disable();
+      });
+    }
+  }
+
+  ngAfterViewInit() {
+    console.log('list-shop-ngAfterViewInit:', this.paginator);
+    //this.paginator.pageSize = 100;
+    this.dataSource.loadShops(
+      this.user,
+      this.filters,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    );
+    this.dataSource.counter$
+      .pipe(
+        tap((count) => {
+          this.paginator.length = count;
+        })
+      )
+      .subscribe();
+    // when paginator event is invoked, retrieve the related data
+    this.paginator.page.subscribe(() =>
+      this.dataSource.loadShops(
+        this.user,
+        this.filters,
+        this.paginator.pageIndex,
+        this.paginator.pageSize
+      )
+    );
+  }
+
+  editShop(shop: any) {
+    //console.log("In Edit User " + product);
+    sessionStorage.setItem('EDIT_SHOP', JSON.stringify(shop));
+    this._router.navigateByUrl('/addr/shop/edit');
+  }
+
+  addShop() {
+    sessionStorage.removeItem('EDIT_SHOP');
+    this._router.navigateByUrl('/addr/shop/add');
+  }
+
+  getFilteredShopList() {
+    // removing the selection for bulk edit
+    this.selection.selected.forEach((id: any) => this.selection.deselect(id));
+    if (this.searchPanel.valid) {
+      console.log('getFilteredShopList()');
+      this.isCallInProgress = true;
+      // using get method in district bcoz district field can be in disable mode
+      let _filters = {
+        DISTRICT: this.searchPanel.get('district')?.value
+          ? this.searchPanel.get('district')?.value.toLowerCase()
+          : null,
+        TALUK: this.searchPanel.value['taluk']
+          ? this.searchPanel.value['taluk'].toLowerCase()
+          : null,
+        SHOP_NAME: this.searchPanel.value['shop_name']
+          ? this.searchPanel.value['shop_name'].toLowerCase()
+          : null,
+        SHOP_CODE: this.searchPanel.value['shop_code']
+          ? this.searchPanel.value['shop_code'].toLowerCase()
+          : null,
+      };
+      console.log('Calling get Usser with Filters: ', _filters);
+      this.filters = _filters;
+      sessionStorage.setItem('shop_filters', JSON.stringify(this.filters));
+      this.paginator.pageIndex = 0;
+      this.loadRecords(
+        this.user,
+        this.filters,
+        this.paginator.pageIndex,
+        this.paginator.pageSize
+      );
+    }
+  }
+
+  clearSearchFields() {
+    this.isCallInProgress = true;
+    this.searchPanel.patchValue({
+      district: '',
+      taluk: '',
+      shop_name: '',
+      shop_code: '',
+    });
+
+    if (this.user && isBlockAdmin(this.user)) {
+      let userDistrictId: any = this.user.district_id;
+      this.shopService.getDistrictName(userDistrictId).then((disName: any) => {
+        this.searchPanel.get('district')?.setValue(disName);
+        this.searchPanel.get('district')?.disable();
+      });
+    }
+
+    this.filters = {
+      DISTRICT: null,
+      TALUK: null,
+      SHOP_NAME: null,
+      SHOP_CODE: null,
+    };
+    // removing the selection for bulk edit
+    this.selection.selected.forEach((id: any) => this.selection.deselect(id));
+
+    sessionStorage.removeItem('shop_filters');
+
+    this.paginator.pageIndex = 0;
+    this.loadRecords(
+      this.user,
+      this.filters,
+      this.paginator.pageIndex,
+      this.paginator.pageSize
+    );
+  }
+
+  loadRecords(user: User, filters: any, pageIndex: number, pageSize: number) {
+    let stopCallProgress = () => {
+      this.isCallInProgress = false;
+    };
+    this.dataSource.loadShops(
+      user,
+      filters,
+      pageIndex,
+      pageSize,
+      stopCallProgress
+    );
+  }
+
+  async createExportData(data: any) {
+    const exportData: any = [];
+    for (var i = 0; i < data.length; i++) {
+      const elem = data[i];
+      const revVillage = elem.rev_village_id
+        ? await this.shopService.getRevVillageName(elem.rev_village_id)
+        : null;
+      exportData.push({
+        District: elem.district || '-',
+        Taluk: elem.taluk || '-',
+        Village: elem.village || '-',
+        'Revenue Village': revVillage || '-',
+        'Shop Name': elem.shop_name || '-',
+        'Shop Code': elem.shop_code || '-',
+        'Street Name': elem.street_name || '-',
+        'Created On': elem?.date_created
+          ? new Date(elem.date_created)?.toLocaleDateString()
+          : '-',
+        'Last Updated': elem?.last_update_date
+          ? new Date(elem.last_update_date)?.toLocaleDateString()
+          : '-',
+        Active: elem.active || '-',
+      });
+    }
+    this.isExportInProgress = false;
+    console.log('shop export data', exportData);
+    exportToExcel(exportData, 'Shops.xlsx');
+  }
+
+  total_records: any = [];
+
+  downloadRecords(pageInd = 0) {
+    this.isExportInProgress = true;
+    this.shopService
+      .getShops(this.user, this.filters, pageInd, 20000)
+      .subscribe(async (result: any) => {
+        const data = result?.data || [];
+        this.total_records.push(...data);
+        if (result?.status == 'SUCCESS-CONTINUE') {
+          this.downloadRecords(++pageInd);
+        }
+        if (result?.status == 'SUCCESS-FINAL') {
+          this.createExportData(this.total_records);
+        }
+      });
+  }
+
+  isAllSelected() {
+    const selectedRecords = this.selection.selected;
+    let records: any = this.dataSource.shopsSubject.value;
+    //removing unallocated items from the list
+    records = records.filter(
+      (elem) => !elem?.shop_name?.toLowerCase().includes('unallocated')
+    );
+    return !records.some((el) => selectedRecords.indexOf(el.shop_id) == -1);
+  }
+
+  masterToggle() {
+    let shops = this.dataSource.shopsSubject.value;
+    //removing unallocated items from the list
+    shops = shops.filter(
+      (elem) => !elem?.shop_name?.toLowerCase().includes('unallocated')
+    );
+    this.isAllSelected()
+      ? shops.forEach((shop) => this.selection.deselect(shop.shop_id))
+      : shops.forEach((shop) => this.selection.select(shop.shop_id));
+  }
+
+  disableMasterToggle() {
+    // disable master checkbox when all records are having unallocated name
+    const shops = this.dataSource.shopsSubject.value;
+    return shops.every((shop) =>
+      shop?.shop_name?.toLowerCase().includes('unallocated')
+    );
+  }
+
+  bulkEdit() {
+    console.log(this.selection.selected);
+    const dialogRef = this.dialog.open(ShopBulkEditComponent, {
+      data: {
+        shopIds: this.selection.selected,
+      },
+      width: '500px',
+      autoFocus: false,
+      hasBackdrop: true,
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('dialog close', result);
+      this.selection.selected.forEach((id: any) => this.selection.deselect(id));
+      if (result) {
+        //this.paginator.pageIndex = 0;
+        this.loadRecords(
+          this.user,
+          this.filters,
+          this.paginator.pageIndex,
+          this.paginator.pageSize
+        );
+      }
+    });
+  }
+
+  disableEdit(data: any): boolean {
+    return disableEdit(data?.shop_name);
+  }
+}

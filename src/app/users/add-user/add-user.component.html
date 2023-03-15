@@ -1,0 +1,505 @@
+<div id="forms" class="page-layout simple fullwidth" fxLayout="column">
+
+    <!-- HEADER -->
+    <div class="header accent p-24 h-80" fxLayout="row" fxLayoutAlign="space-between center">
+        <div class="logo-text" fxLayout="column" fxLayoutAlign="center start">
+            <div class="h1 mt-16">{{title}}</div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" [routerLink]="'/users/list'" style="cursor: pointer;">
+            <button mat-icon-button>
+                <mat-icon>keyboard_backspace</mat-icon>
+            </button>
+            <span>Back</span>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content p-24">
+
+        <div class="horizontal-stepper-wrapper">
+
+            <!-- HORIZONTAL STEPPER -->
+            <mat-stepper linear #stepper class="mat-elevation-z4">
+
+                <mat-step [stepControl]="personalDetails">
+
+                    <form fxLayout="column" [formGroup]="personalDetails">
+                        <ng-template matStepLabel>Personal Details</ng-template>
+
+                        <div fxFlex="1 0 auto" fxLayout="column">
+
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayout.xs="column">
+                                <mat-form-field appearance="outline" fxFlex="10">
+                                    <mat-label>User Title</mat-label>
+                                    <input type="text"
+                                           placeholder="Select Title"
+                                           aria-label="User Title"
+                                           matInput
+                                           formControlName="user_title"
+                                           [matAutocomplete]="userTitle"
+                                           required>
+                                    <mat-autocomplete #userTitle="matAutocomplete">
+                                       <mat-option *ngFor="let option of titleFilteredOptions | async" [value]="option">
+                                            {{option}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="personalDetails.get('user_title')?.hasError('required')">
+                                        User title is required
+                                    </mat-error>
+                                    <mat-error *ngIf="personalDetails.get('user_title')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                                </mat-form-field>
+
+                                <div fxFlex="4"></div>
+
+                                <mat-form-field appearance="outline" fxFlex="31">
+                                    <mat-label>User First Name</mat-label>
+                                    <input matInput formControlName="user_first_name" required>
+                                    <mat-error *ngIf="personalDetails.get('user_first_name')?.hasError('required')">
+                                        User first name is required
+                                    </mat-error>
+                                    <mat-error *ngIf="personalDetails.get('user_first_name')?.hasError('pattern') && !personalDetails.get('user_first_name')?.hasError('required')">
+                                        User first name should have only alphabets
+                                    </mat-error>
+                                </mat-form-field>
+                                <div fxFlex="4"></div>
+
+                                <mat-form-field appearance="outline" fxFlex="31">
+                                    <mat-label>User Last Name</mat-label>
+                                    <input matInput formControlName="user_last_name" required>
+                                    <mat-error *ngIf="personalDetails.get('user_last_name')?.hasError('required')">
+                                        User last name is required
+                                    </mat-error>
+                                    <mat-error *ngIf="personalDetails.get('user_last_name')?.hasError('pattern') && !personalDetails.get('user_last_name')?.hasError('required')">
+                                        User last name should have only alphabets
+                                    </mat-error>
+                                </mat-form-field>
+                                <div fxFlex="4"></div>
+
+                                <mat-form-field appearance="outline" fxFlex="16">
+                                    <mat-label>Gender</mat-label>
+                                    <input type="text"
+                                           placeholder="Select Gender"
+                                           aria-label="Gender"
+                                           matInput
+                                           formControlName="gender"
+                                           [matAutocomplete]="gender"
+                                           required>
+                                        <mat-autocomplete #gender="matAutocomplete">
+                                            <mat-option *ngFor="let option of genderFilteredOptions | async" [value]="option">
+                                                {{option}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="personalDetails.get('gender')?.hasError('required')">
+                                            Please select a gender
+                                        </mat-error>
+                                        <mat-error *ngIf="personalDetails.get('gender')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayout.xs="column">
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Date of Birth</mat-label>
+                                    <input matInput [matDatepicker]="dp" [max]="today" formControlName="birth_date" [readonly]="true" required>
+                                    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                                    <mat-datepicker #dp></mat-datepicker>
+                                  </mat-form-field>
+                                <div fxFlex="2"></div>
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Mobile Number</mat-label>
+                                    <input matInput formControlName="mobile_number" required>
+                                    <mat-error *ngIf="personalDetails.get('mobile_number')?.hasError('required')">
+                                        Mobile number is <strong>required</strong>
+                                    </mat-error>
+                                    <mat-error *ngIf="personalDetails.get('mobile_number')?.hasError('minlength') && !personalDetails.get('mobile_number')?.hasError('required')">
+                                        Mobile number should have 10 digits
+                                    </mat-error>
+                                    <mat-error *ngIf="personalDetails.get('mobile_number')?.hasError('maxlength') && !personalDetails.get('mobile_number')?.hasError('required')">
+                                        Mobile number should have only 10 digits
+                                    </mat-error>
+                                    <mat-error *ngIf="personalDetails.get('mobile_number')?.hasError('pattern') && !personalDetails.get('mobile_number')?.hasError('required')">
+                                        Mobile number should have only numbers
+                                    </mat-error>
+                                    <mat-error *ngIf="personalDetails.hasError('number_exists')">User with this mobile exist at facility {{personalDetails.getError('number_exists_facility')}}.</mat-error>
+                                </mat-form-field>
+                                <div fxFlex="2"></div>
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput formControlName="email" required>
+                                    <mat-error *ngIf="personalDetails.get('email')?.hasError('required')">Email is required</mat-error>
+                                    <mat-error *ngIf="personalDetails.get('email')?.hasError('email')">Please enter valid email</mat-error>
+                                    <mat-error *ngIf="personalDetails.get('email')?.hasError('pattern') && !personalDetails.get('email')?.hasError('email')">Please enter valid email</mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+                            <!--<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                <mat-form-field appearance="outline" fxFlex="48">
+                                    <mat-label>Alternate Mobile Number</mat-label>
+                                    <input matInput formControlName="alt_mobile_number">
+                                </mat-form-field>
+
+                                <div fxFlex="4"></div>
+    
+                                <mat-form-field appearance="outline" fxFlex="48">
+                                    <mat-label>Alternate Email</mat-label>
+                                    <input matInput formControlName="alt_email">
+                                </mat-form-field>
+
+                            </div>-->
+ 
+                            <mat-form-field appearance="outline" fxFlex="100">
+                                <mat-label>Postal Address</mat-label>
+                                <input matInput formControlName="postal_address">
+                            </mat-form-field>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                            <button mat-raised-button matStepperNext type="button" color="primary" (click)="checkForPersonalDetailsError()">
+                                Next
+                            </button>
+                        </div>
+                    </form>
+                </mat-step>
+
+                <mat-step [stepControl]="employeeDetails">
+                    <form fxLayout="column" [formGroup]="employeeDetails">
+                        <ng-template matStepLabel>Employee Details</ng-template>
+
+                        <div fxFlex="1 0 auto" fxLayout="column">
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayout.xs="column">
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Employee Id</mat-label>
+                                    <input matInput formControlName="employee_id" required>
+                                    <mat-error *ngIf="employeeDetails.get('employee_id')?.hasError('required')">
+                                        Employee Id is required
+                                    </mat-error>
+                                    <mat-error *ngIf="employeeDetails.get('employee_id')?.hasError('pattern') && !personalDetails.get('employee_id')?.hasError('required')">
+                                        Employee Id should have alphabets and numbers.
+                                    </mat-error>
+                                    <mat-error *ngIf="employeeDetails.get('employee_id')?.hasError('maxlength') && !personalDetails.get('employee_id')?.hasError('required')">
+                                        Employee ID should have only 15 digits
+                                    </mat-error>
+                                </mat-form-field>
+                                <div fxFlex="4"></div>
+                                <!--<mat-form-field appearance="outline" fxFlex="100">
+                                    <mat-label>Employee Id Type</mat-label>
+                                    <input matInput formControlName="employee_id_type">
+                                </mat-form-field>-->
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Employee Type</mat-label>
+                                    <mat-select formControlName="employee_type" required>
+                                        <mat-option *ngFor="let empType of empTypes" [value]="empType.name">
+                                            {{empType.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="employeeDetails.get('employee_type')?.hasError('required')">
+                                        Employee Type is required
+                                    </mat-error>
+                                </mat-form-field>
+                                <div fxFlex="4"></div>
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Nature of Work</mat-label>
+                                    <mat-select formControlName="nature_of_work" required>
+                                        <mat-option *ngFor="let workNature of workNatures" [value]="workNature.name">
+                                            {{workNature.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="employeeDetails.get('nature_of_work')?.hasError('required')">
+                                        Nature Of Work is required
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayout.xs="column">
+                                <mat-form-field appearance="outline" fxFlex="48">
+                                    <mat-label>Date of Joining</mat-label>
+                                    <input matInput [matDatepicker]="dp2" [max]="today" formControlName="date_of_joining" [readonly]="true" required>
+                                    <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+                                    <mat-datepicker #dp2></mat-datepicker>
+                                    <mat-error *ngIf="employeeDetails.get('date_of_joining')?.hasError('required')">
+                                        Date Of Joining is required
+                                    </mat-error>
+                                  </mat-form-field>
+                                <div fxFlex="4"></div>
+                                <mat-form-field appearance="outline" fxFlex="48">
+                                    <mat-label>Is Active</mat-label>
+                                    <mat-select formControlName="active" required>
+                                        <mat-option value="Yes">Yes</mat-option>
+                                        <mat-option value="No">No</mat-option>
+                                    </mat-select>
+                                    <mat-error>Active Status required!</mat-error>
+                                </mat-form-field>
+                                <!--<div fxFlex="4"></div>
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Promotion Hierarchy</mat-label>
+                                    <input matInput formControlName="promotion_hierarchy">
+                                </mat-form-field> 
+                                <div fxFlex="4"></div>
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Seniority Id</mat-label>
+                                    <input matInput formControlName="seniority_id">
+                                </mat-form-field> -->
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayout.xs="column">
+
+                                <mat-form-field appearance="outline" fxFlex="48">
+                                    <mat-label>Role</mat-label>
+                                    <input type="text"
+                                           placeholder="Select Employee Role"
+                                           aria-label="Employee Role"
+                                           matInput
+                                           formControlName="role"
+                                           [matAutocomplete]="role"
+                                           required
+                                           (blur)="getPhrRoles()">
+                                        <mat-autocomplete #role="matAutocomplete" [displayWith]="displayRoleFn">
+                                            <mat-option *ngFor="let option of filteredEmployeeRoles | async" [value]="option">
+                                                {{option.role_name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="employeeDetails.get('role')?.hasError('required')">
+                                            Employee <strong>required</strong>
+                                        </mat-error>
+                                        <mat-error *ngIf="employeeDetails.get('role')?.hasError('Selected_Option_Not_In_List')">
+                                            Please select from given options
+                                        </mat-error>
+                                </mat-form-field>
+
+                                <div fxFlex="4"></div>
+
+                                <mat-form-field appearance="outline" fxFlex="48">
+                                    <mat-label>Designation</mat-label>
+                                    <input matInput formControlName="designation">
+                                    <mat-error>Please select User Designation</mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayout.xs="column">
+                                <!--<mat-form-field appearance="outline" fxFlex="48">
+                                    <mat-label>Pay Matrix Number</mat-label>
+                                    <input matInput formControlName="pay_matrix_number">
+                                </mat-form-field>
+                                <div fxFlex="4"></div>-->
+                                <mat-form-field appearance="outline" fxFlex="48">
+                                    <mat-label>PHR Role</mat-label>
+                                    <input type="text"
+                                           placeholder="Select PHR Role"
+                                           aria-label="PHR Role"
+                                           matInput
+                                           formControlName="phr_role"
+                                           [matAutocomplete]="phrRole"
+                                           required
+                                           (blur)="onPhrRoleBlur()">
+                                        <mat-autocomplete #phrRole="matAutocomplete">
+                                            <mat-option *ngFor="let phrRole of phrRoleFiltedOptions | async" [value]="phrRole.name">
+                                                {{phrRole.name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="employeeDetails.get('phr_role')?.hasError('required')">
+                                            Phr role is <strong>required</strong>
+                                        </mat-error>
+                                        <mat-error *ngIf="employeeDetails.get('phr_role')?.hasError('Selected_Option_Not_In_List')">
+                                            Please select from given options
+                                        </mat-error>
+                                </mat-form-field>
+                                <div fxFlex="4"></div>
+
+                                <mat-form-field appearance="outline" fxFlex="48">
+                                    <mat-label>Role in Facility</mat-label>
+                                    <input type="text"
+                                           placeholder="Select Role in facility"
+                                           aria-label="Facility Role"
+                                           matInput
+                                           formControlName="role_in_facility"
+                                           [matAutocomplete]="facilityRole"
+                                           required>
+                                        <mat-autocomplete #facilityRole="matAutocomplete">
+                                            <mat-option *ngFor="let option of facilityRoleFilteredOption | async" [value]="option.name">
+                                                {{option.name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="employeeDetails.get('role_in_facility')?.hasError('required')">
+                                            Role in Facility <strong>required</strong>
+                                        </mat-error>
+                                        <mat-error *ngIf="employeeDetails.get('role_in_facility')?.hasError('Selected_Option_Not_In_List')">
+                                            Please select from given options
+                                        </mat-error>
+                                        <mat-error *ngIf="employeeDetails.hasError('admin_not_allwed_for_phr_user_role')">Cannot add Admin role for PHR non admin role.</mat-error>
+                                        <mat-error *ngIf="employeeDetails.hasError('user_not_allwed_for_phr_admin_role')">Cannot add User role for PHR admin role.</mat-error>
+                                </mat-form-field>
+                                <!--<mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Has Displinary Action</mat-label>
+                                    <mat-select formControlName="has_displinary_action">
+                                        <mat-option [value]="'true'">Yes</mat-option>
+                                        <mat-option [value]="'false'">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field> -->
+                            </div>
+
+                            <!--<div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto"> 
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Status</mat-label>
+                                    <mat-select formControlName="status">
+                                        <mat-option *ngFor="let stats of status" [value]="stats.name">
+                                            {{stats.name}}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error>Employee Status required!</mat-error>
+                                </mat-form-field>   
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>eSign Required</mat-label>
+                                    <mat-select formControlName="esign_required">
+                                        <mat-option [value]="'true'">Yes</mat-option>
+                                        <mat-option [value]="'false'">No</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div> -->
+
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+
+                                <mat-form-field appearance="outline" fxFlex="100">
+                                    <mat-label>Primary Facility</mat-label>
+                                    <input type="text"
+                                           placeholder="Select Facility"
+                                           aria-label="Facility"
+                                           matInput
+                                           formControlName="facility_id"
+                                           [matAutocomplete]="primeFacility"
+                                           required (blur)="onFacilityBlur()">
+                                        <mat-autocomplete #primeFacility="matAutocomplete" [displayWith]="displayFn">
+                                            <mat-option *ngFor="let facility of primaryFacilityFilteredOptions | async" [value]="facility">
+                                                {{facility.facility_name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="employeeDetails.get('facility_id')?.hasError('required')">
+                                            Please select a facility
+                                        </mat-error>
+                                        <mat-error *ngIf="employeeDetails.get('facility_id')?.hasError('Selected_Option_Not_In_List')">
+                                            Please select from given options
+                                        </mat-error>
+                                </mat-form-field>
+
+                            </div>
+
+                            <div fxLayout="row" *ngIf="detailsShow" fxLayoutAlign="start center" fxFlex="1 0 auto" display="None">
+                                <span><h3>Primary Facility Details - {{facilityDetails}}</h3></span>
+                            </div>
+                            
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" fxLayout.xs="column">
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Department</mat-label>
+                                    <input type="text"
+                                           placeholder="Select Department"
+                                           aria-label="Department"
+                                           matInput
+                                           formControlName="department"
+                                           [matAutocomplete]="department"
+                                           required>
+                                    <mat-autocomplete #department="matAutocomplete" [displayWith]="displayDepartmentFn">
+                                       <mat-option *ngFor="let option of departmentFilteredOptions | async" [value]="option">
+                                            {{option.department_name}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="employeeDetails.get('department')?.hasError('required')">
+                                        Department is required
+                                    </mat-error>
+                                    <mat-error *ngIf="employeeDetails.get('department')?.hasError('Selected_Option_Not_In_List')">
+                                        Please select from given options
+                                    </mat-error>
+                                </mat-form-field>
+                                <div fxFlex="2"></div>
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Clinic</mat-label>
+                                    <input type="text"
+                                           placeholder="Select Clinic"
+                                           aria-label="Clinic"
+                                           matInput
+                                           formControlName="clinic"
+                                           [matAutocomplete]="clinic"
+                                           required>
+                                    <mat-autocomplete #clinic="matAutocomplete" [displayWith]="displayClinicFn">
+                                       <mat-option *ngFor="let option of clinicFilteredOptions | async" [value]="option">
+                                            {{option.clinic_name}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="employeeDetails.get('clinic')?.hasError('required')">
+                                        Clinic is required
+                                    </mat-error>
+                                    <mat-error *ngIf="employeeDetails.get('clinic')?.hasError('Selected_Option_Not_In_List')">
+                                        Please select from given options
+                                    </mat-error>
+                                </mat-form-field>
+                                <div fxFlex="2"></div>
+                                <!--<mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Clinic Type</mat-label>
+                                    <input matInput formControlName="clinic_type">                                    
+                                    <mat-error>Clinic Type required!</mat-error>
+                                </mat-form-field>-->
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Clinic Type</mat-label>
+                                    <input type="text"
+                                           placeholder="Select Clinic type"
+                                           aria-label="ClinicType"
+                                           matInput
+                                           formControlName="clinic_type"
+                                           [matAutocomplete]="clinicType"
+                                           required>
+                                    <mat-autocomplete #clinicType="matAutocomplete" [displayWith]="displayClinicTypeFn">
+                                       <mat-option *ngFor="let option of clinicTypeFilteredOptions | async" [value]="option">
+                                            {{option.clinic_type_name}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="employeeDetails.get('clinic_type')?.hasError('required')">
+                                        Clinic Type is required
+                                    </mat-error>
+                                    <mat-error *ngIf="employeeDetails.get('clinic_type')?.hasError('Selected_Option_Not_In_List')">
+                                        Please select from given options
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>                            
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                            <button class="mr-8" mat-raised-button matStepperPrevious type="button" color="primary" [disabled]="isCallInProgress">
+                                Previous
+                            </button>
+                            <div fxFlex="2"></div>
+                            <button mat-raised-button type="submit" color="primary" (click)="finishUserStepper()" [disabled]="isCallInProgress">
+                                Finish
+                            </button>
+                            <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+                        </div>
+                    </form>
+                </mat-step>
+
+                <!--<mat-step>
+                    <ng-template matStepLabel>Done</ng-template>
+                    <div class="h2 m-16" fxLayout="row" fxLayoutAlign="center center">
+                        <h2 style="margin-top: 50px; margin-bottom: 50px;">User form is complete. Click 'Finish' below to save the User.</h2>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="space-evenly center">
+                        <button class="mr-8" mat-raised-button matStepperPrevious type="button" color="primary" [disabled]="isCallInProgress">
+                            Previous
+                        </button>
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                            <button mat-raised-button type="button" color="primary" (click)="finishUserStepper()" [disabled]="isCallInProgress">
+                                Finish
+                            </button>
+                            <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+                        </div>
+                    </div>
+                </mat-step>-->
+            </mat-stepper>
+            <!-- / HORIZONTAL STEPPER -->
+        </div>
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>
+
+

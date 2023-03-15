@@ -1,0 +1,15 @@
+<div class="main">
+  <div class="header">
+    <app-topbar (sideBarToggle)="sideBarToggler()"></app-topbar>
+  </div>
+  <div class="content">
+    <mat-sidenav-container>
+      <mat-sidenav [mode]="isBiggerScreen() ? 'side' : 'over'" [opened]="sideBarOpen">
+        <app-sidenav (closeSideNav)="closeSideNav()"></app-sidenav>
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <app-content></app-content>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+</div>

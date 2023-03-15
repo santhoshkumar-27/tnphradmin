@@ -1,0 +1,32 @@
+<div fxLayout="column">
+    <h2 mat-dialog-title>Edit Facility Details</h2>
+    <div mat-dialog-content>
+        <form [formGroup]="facilityDetails">
+            <div fxLayout="row" fxLayoutAlign="center center">
+                <mat-form-field appearance="outline" fxFlex="49">
+                    <mat-label>Whether HWC</mat-label>
+                    <mat-select formControlName="is_hwc">
+                        <mat-option *ngFor="let hwc of hwcOptions" [value]="hwc.name">{{hwc.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <mat-form-field appearance="outline" fxFlex="49">
+                    <mat-label>Is Active</mat-label>
+                    <mat-select formControlName="active">
+                        <mat-option value="Yes">Yes</mat-option>
+                        <mat-option value="No">No</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="errMsg" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+        <mat-error>{{errMsg}}</mat-error>
+    </div>
+    <div mat-dialog-actions>
+        <button type="button" mat-stroked-button mat-dialog-close>Close</button>
+        <button type="submit" mat-flat-button color="primary" (click)="updateFacilities()"
+            [disabled]="isCallInProgress">Save</button>
+        <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+    </div>
+</div>

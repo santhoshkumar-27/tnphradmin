@@ -1,0 +1,106 @@
+// search panel div class
+.content-card {
+
+    .mat-form-field {
+
+        // css for outline
+        &.mat-form-field-appearance-outline .mat-form-field-outline {
+            color: rgb(0 0 0 / 25%);
+        }
+
+        &.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+            color: rgba(0, 0, 0, 0.87);
+        }
+
+        &.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+            color: #ffc107;
+        }
+
+        &.mat-form-field-appearance-outline.mat-form-field-invalid .mat-form-field-outline-thick {
+            color: #f44336;
+        }
+
+        &.mat-form-field-appearance-outline .mat-form-field-outline {
+
+            .mat-form-field-outline-start,
+            .mat-form-field-outline-end,
+            .mat-form-field-outline-gap {
+                border-width: 1.5px;
+            }
+        }
+
+        &.mat-form-field-appearance-outline .mat-form-field-outline.mat-form-field-outline-thick {
+
+            .mat-form-field-outline-start,
+            .mat-form-field-outline-end,
+            .mat-form-field-outline-gap {
+                border-width: 2px;
+            }
+        }
+
+        // css for input value
+        .mat-input-element {
+            color: #000;
+            font-size: 16px;
+        }
+
+        // css for placeholder label
+        &.mat-form-field-appearance-outline .mat-form-field-label {
+            top: 1.34375em;
+            margin-top: 0;
+            color: rgba(0, 0, 0);
+            font-size: 16px;
+        }
+
+        // css for floating label
+        &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+            transform: translateY(-1.4em) scale(0.75);
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label mat-label {
+            border: 10px solid white;
+            background: white;
+            margin-left: -7px;
+        }
+
+        &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label mat-label {
+            color: #000;
+        }
+
+        &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-form-field-invalid .mat-form-field-label mat-label {
+            color: #f44336;
+        }
+
+        &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-form-field-invalid.mat-focused .mat-form-field-label mat-label {
+            color: #f44336;
+        }
+
+        &.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float.mat-focused .mat-form-field-label mat-label {
+            color: #ffc107;
+        }
+
+        //css for disabled outline and input value
+        &.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-outline {
+            color: rgba(0, 0, 0, 0.25);
+            opacity: 0.3;
+        }
+
+        &.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-label {
+            color: rgba(0, 0, 0, 0.48);
+        }
+
+        .mat-input-element:disabled {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+    }
+
+    mat-accordion {
+        .mat-expansion-panel-header-title {
+            font-size: 18px;
+            color: #000;
+        }
+    }
+}

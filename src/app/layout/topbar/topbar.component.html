@@ -1,0 +1,75 @@
+<mat-toolbar class="p-0 mat-elevation-z1">
+
+  <div fxFlex fxFill fxLayout="row" fxLayoutAlign="start center">
+
+      <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
+
+        <!--<div class="topbar-separator" fxHide.gt-md></div> -->
+
+        <div fxLayout="row" fxLayoutAlign="start center">
+
+            <span class="logo-text">TNPHR Web Admin</span>
+
+            <button mat-icon-button [disabled]="toggleButton" class="sidenav-toggle-button" (click)="toggleSidenav()">
+                <mat-icon class="secondary-text">menu</mat-icon>
+            </button>
+
+        </div>
+
+      </div>
+
+      <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="centre center" fxHide.xs>
+        <img class="logo-icon" width="6%" src="assets/images/DPHLogo.png">
+        <div class="topbar-separator" fxHide.gt-md></div>
+        <img class="logo-icon" width="6%" src="assets/images/NHMLogo.png">
+        <div class="topbar-separator" fxHide.gt-md></div>
+        <img class="logo-icon" width="8%" src="assets/images/TamilNadu_Logo.png">
+        <div class="topbar-separator" fxHide.gt-md></div>
+        <img class="logo-icon" width="6%" src="assets/images/UHC_Logo.png">
+        <div class="topbar-separator" fxHide.gt-md></div>
+        <img class="logo-icon" width="10%" src="assets/images/MTM_logo.png">
+      </div>
+      
+
+      <div class="" fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
+
+          <button mat-button [matMenuTriggerFor]="userMenu"
+                  class="user-button" *ngIf="user">
+              <div fxLayout="row" fxLayoutAlign="center center">
+                  <!--img class="avatar mr-0 mr-sm-16" src="assets/images/avatars/Velazquez.jpg"-->
+                  <mat-icon>account_circle</mat-icon>
+                  <span class="username mr-12" fxHide fxShow.gt-sm>{{user.user_first_name}}</span>
+                  <mat-icon class="s-16" fxHide.xs>keyboard_arrow_down</mat-icon>
+              </div>
+          </button>
+
+          <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
+
+              <!--<button mat-menu-item>
+                  <mat-icon>account_circle</mat-icon>
+                  <span>My Profile</span>
+              </button>-->
+
+              <button mat-menu-item class="" (click)="logout()">
+                  <span class="fas fa-sign-out-alt" style="font-size: 16px; padding: 8px; color: grey;"></span>
+                  <span>Logout</span>
+              </button>
+
+          </mat-menu>
+
+          <button mat-button
+                  class="sign-in-button"
+                  (click)="navigateToLogin()" *ngIf="!user">
+              <div fxLayout="row" fxLayoutAlign="center center">
+                  <span class="fas fa-sign-in-alt" style="font-size: 16px; padding: 8px; color: grey;"></span>
+                  <span class="iso text-uppercase">Sign In</span>
+              </div>
+          </button>
+
+          <!--div class="topbar-separator"></div-->
+
+      </div>
+
+  </div>
+
+</mat-toolbar>

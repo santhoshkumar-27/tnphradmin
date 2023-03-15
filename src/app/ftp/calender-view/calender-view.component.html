@@ -1,0 +1,186 @@
+<div class="calender-container">
+  <div fxLayout="column">
+    <div fxLayout="row">
+      <div class="calender-cell_day"></div>
+      <div class="calender-cell_day bg-blue center" *ngFor="let day of DAYS">
+        {{ day }}
+      </div>
+    </div>
+
+    <div fxLayout="row" *ngFor="let week of WEEKS">
+      <div class="calender-cell bg-green center">{{ week.name }}</div>
+
+      <div class="calender-cell" *ngFor="let day of DAYS">
+        <!-- default view -->
+        <div *ngIf="
+            !storeFtpMappings[week.value][day]?.view &&
+            !storeFtpMappings[week.value][day].split
+          " fxLayout="column" style="width: 100%; height: 100%; padding: 10px">
+          <button *ngIf="!this.storeFtpMappings[week.value][day].isHoliday" fxFlex="15" type="button" color="primary"
+            mat-flat-button (click)="splitCell(week.value, day)">
+            Split
+          </button>
+          <div fxFlex="10"></div>
+          <div *ngIf="this.storeFtpMappings[week.value][day].isHoliday" fxFlex="22"></div>
+          <div fxFlex="35" fxLayout fxLayoutAlign="center center">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-select [(ngModel)]="storeFtpMappings[week.value][day].unit[0]"
+                (selectionChange)="getFilteredStreets(week.value, day, 0)">
+                <mat-option value="">Select Unit</mat-option>
+                <mat-option *ngFor="let unit of UNITS" [value]="unit.value">{{
+                  unit.name
+                  }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex="35" fxLayout fxLayoutAlign="center center"
+            *ngIf="!this.storeFtpMappings[week.value][day].isHoliday">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-select multiple [(ngModel)]="storeFtpMappings[week.value][day].streets[0]"
+                placeholder="Select Street">
+                <mat-select-trigger>
+                  <app-multi-streets-ui [streets]="storeFtpMappings[week.value][day].streets[0]"></app-multi-streets-ui>
+                </mat-select-trigger>
+                <mat-option *ngFor="
+                    let street of storeFtpMappings[week.value][day]
+                      .filteredStreets[0]
+                  " [value]="street" [disabled]="
+                    disableOptions(
+                      storeFtpMappings[week.value][day].streets[0],
+                      street
+                    )
+                  ">{{ street.street_name }}</mat-option>
+                <mat-option *ngIf="
+                    storeFtpMappings[week.value][day].filteredStreets[0]
+                      ?.length == 0
+                  " disabled="true" class="no_streets">No Streets in
+                  {{ storeFtpMappings[week.value][day].unit[0] }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <!-- default view -->
+
+        <!-- split mode -->
+
+        <div *ngIf="
+            !storeFtpMappings[week.value][day]?.view &&
+            storeFtpMappings[week.value][day].split
+          " fxLayout="column" style="width: 100%; height: 100%">
+          <div *ngIf="!this.storeFtpMappings[week.value][day].isHoliday" fxFlex="12" fxLayout
+            fxLayoutAlign="end center">
+            <mat-icon style="cursor: pointer" (click)="gotoDefaultMode(week.value, day)">close</mat-icon>
+          </div>
+          <div *ngIf="this.storeFtpMappings[week.value][day].isHoliday" fxFlex="40"></div>
+          <div fxFlex="44" class="split-area-1">
+            <div fxLayout fxLayoutAlign="center center" style="margin-bottom: 5px">
+              <mat-form-field appearance="outline" style="width: 100%">
+                <mat-select [(ngModel)]="storeFtpMappings[week.value][day].unit[0]"
+                  (selectionChange)="getFilteredStreets(week.value, day, 0)">
+                  <mat-option value="">Select Unit</mat-option>
+                  <mat-option *ngFor="let unit of UNITS" [value]="unit.value">{{
+                    unit.name
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxLayout fxLayoutAlign="center center" *ngIf="!this.storeFtpMappings[week.value][day].isHoliday">
+              <mat-form-field appearance="outline" style="width: 100%">
+                <mat-select [(ngModel)]="storeFtpMappings[week.value][day].streets[0]" placeholder="Select Street"
+                  multiple>
+                  <mat-select-trigger>
+                    <app-multi-streets-ui [streets]="storeFtpMappings[week.value][day].streets[0]">
+                    </app-multi-streets-ui>
+                  </mat-select-trigger>
+                  <mat-option *ngFor="
+                      let street of storeFtpMappings[week.value][day]
+                        .filteredStreets[0]
+                    " [value]="street" [disabled]="
+                      disableOptions(
+                        storeFtpMappings[week.value][day].streets[0],
+                        street
+                      )
+                    ">{{ street.street_name }}</mat-option>
+                  <mat-option *ngIf="
+                      storeFtpMappings[week.value][day].filteredStreets[0]
+                        ?.length == 0
+                    " disabled="true" class="no_streets">No Streets in
+                    {{ storeFtpMappings[week.value][day].unit[0] }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxFlex="44" class="split-area-2" *ngIf="!this.storeFtpMappings[week.value][day].isHoliday">
+            <div fxLayout fxLayoutAlign="center center" style="margin-bottom: 5px">
+              <mat-form-field appearance="outline" style="width: 100%">
+                <mat-select [(ngModel)]="storeFtpMappings[week.value][day].unit[1]"
+                  (selectionChange)="getFilteredStreets(week.value, day, 1)">
+                  <mat-option value="">Select Unit</mat-option>
+                  <mat-option *ngFor="let unit of UNITS" [value]="unit.value">{{
+                    unit.name
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxLayout fxLayoutAlign="center center">
+              <mat-form-field appearance="outline" style="width: 100%">
+                <mat-select [(ngModel)]="storeFtpMappings[week.value][day].streets[1]" placeholder="Select Street"
+                  multiple>
+                  <mat-select-trigger>
+                    <app-multi-streets-ui [streets]="storeFtpMappings[week.value][day].streets[1]">
+                    </app-multi-streets-ui>
+                  </mat-select-trigger>
+                  <mat-option *ngFor="
+                      let street of storeFtpMappings[week.value][day]
+                        .filteredStreets[1]
+                    " [value]="street" [disabled]="
+                      disableOptions(
+                        storeFtpMappings[week.value][day].streets[1],
+                        street
+                      )
+                    ">{{ street.street_name }}</mat-option>
+                  <mat-option *ngIf="
+                      storeFtpMappings[week.value][day].filteredStreets[1]
+                        ?.length == 0
+                    " disabled="true" class="no_streets">No Streets in
+                    {{ storeFtpMappings[week.value][day].unit[1] }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <!-- split mode -->
+
+        <!-- view mode -->
+        <div class="streetText" *ngIf="storeFtpMappings[week.value][day]?.view" (click)="showEditMode(week.value, day)"
+          [ngStyle]="{
+            'justify-content':
+              storeFtpMappings[week.value][day].streets.flat().length > 4
+                ? 'start'
+                : 'center'
+          }">
+          <ng-container *ngFor="
+              let multiStreets of storeFtpMappings[week.value][day].streets;
+              let i = index
+            ">
+            <div *ngFor="let str of multiStreets" class="{{ 'streetText_span_' + i }}" title="{{ str.street_name }}">
+              {{ str.street_name }}
+            </div>
+          </ng-container>
+          <ng-container
+            *ngIf="storeFtpMappings[week.value][day].unit[0] == 'Holiday' || storeFtpMappings[week.value][day].unit[0] == 'Review'">
+            <div class="holiday">{{storeFtpMappings[week.value][day].unit[0]}}</div>
+          </ng-container>
+        </div>
+        <!-- view mode -->
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 1rem" *ngIf="!hideSaveBtn">
+    <button mat-raised-button type="button" color="primary" (click)="saveFtpData()" [disabled]="isCallInProgress">
+      Save
+    </button>
+    <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+  </div>
+</div>

@@ -1,0 +1,214 @@
+<div id="habitations" class="page-layout carded fullwidth inner-scroll">
+    <!-- CENTER -->
+    <div class="center">
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0" fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16"> home </mat-icon>
+                <span class="logo-text"> Habitation Mgmt. </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- ADD BUTTON -->
+            <ng-container>
+                <button mat-raised-button (click)="addHabitation()" color="primary" fxShow fxHide.xs>
+                    <span>New Habitation</span>
+                </button>
+                <button title="New Habitation" mat-icon-button (click)="addHabitation()" color="primary" fxHide
+                    fxShow.xs>
+                    <mat-icon>add_location</mat-icon>
+                </button>
+            </ng-container>
+            <!-- / ADD BUTTON -->
+        </div>
+        <div class="content-card">
+            <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+                    [expanded]="panelOpenState">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title> Search Panel </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <form fxLayout="column" [formGroup]="searchPanel">
+                        <div fxFlex="1 0 auto" fxLayout="column">
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>District</mat-label>
+                                    <input type="text" placeholder="Select District" aria-label="District" matInput
+                                        formControlName="district" (blur)="onDistrictBlur()"
+                                        [matAutocomplete]="district" />
+                                    <mat-autocomplete #district="matAutocomplete" [displayWith]="displayDistrictFn">
+                                        <mat-option *ngFor="let option of filteredDistricts | async" [value]="option">
+                                            {{ option.district_name }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="
+                            searchPanel
+                              .get('district')
+                              ?.hasError('Selected_Option_Not_In_List')
+                          ">Select from given options</mat-error>
+                                </mat-form-field>
+                                <div fxFlex="2"></div>
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>HUD</mat-label>
+                                    <input type="text" placeholder="Select HUD" aria-label="HUD" matInput
+                                        formControlName="hud" [matAutocomplete]="hud" (blur)="onHudBlur()">
+                                    <mat-autocomplete #hud="matAutocomplete" [displayWith]="displayHudFn">
+                                        <mat-option *ngFor="let hud of filteredHuds | async" [value]="hud">
+                                            {{hud.hud_name}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="searchPanel.get('hud')?.hasError('Selected_Option_Not_In_List')">
+                                        Select from given options</mat-error>
+                                </mat-form-field>
+                                <div fxFlex="2"></div>
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Block</mat-label>
+                                    <input type="text" placeholder="Select Block" aria-label="Block" matInput
+                                        formControlName="block" [matAutocomplete]="block" (blur)="onBlockBlur()" />
+                                    <mat-autocomplete #block="matAutocomplete" [displayWith]="displayBlockFn">
+                                        <mat-option *ngFor="let option of filteredBlocks | async" [value]="option">
+                                            {{ option.block_name }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="
+                      searchPanel
+                        .get('block')
+                        ?.hasError('Selected_Option_Not_In_List')
+                    ">Select from given options</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Village</mat-label>
+                                    <input type="text" placeholder="Select Village" aria-label="Village" matInput
+                                        formControlName="village" [matAutocomplete]="village" />
+                                    <mat-autocomplete #village="matAutocomplete" [displayWith]="displayVillageFn">
+                                        <mat-option *ngFor="let option of filteredVillages | async" [value]="option">
+                                            {{ option.village_name }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="
+                      searchPanel
+                        .get('village')
+                        ?.hasError('Selected_Option_Not_In_List')
+                    ">Select from given options</mat-error>
+                                </mat-form-field>
+                                <div fxFlex="2"></div>
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Habitation Name</mat-label>
+                                    <input matInput formControlName="habitation_name" maxlength="50"/>
+                                    <mat-error *ngIf="searchPanel.get('habitation_name')?.hasError('pattern')">Invalid Pattern</mat-error>
+                                </mat-form-field>
+                                <div fxFlex="2"></div>
+                                <mat-form-field appearance="outline" fxFlex="32">
+                                    <mat-label>Habitation GID</mat-label>
+                                    <input matInput formControlName="habitation_gid" maxlength="10"/>
+                                    <mat-error *ngIf="searchPanel.get('habitation_gid')?.hasError('pattern')">Please enter numbers only</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="center center">
+                            <button [disabled]="isCallInProgress" mat-raised-button type="button" color="primary"
+                                (click)="clearSearchFields()">
+                                Clear
+                            </button>
+                            <div fxFlex="2"></div>
+                            <button [disabled]="isCallInProgress" mat-raised-button type="button" color="primary"
+                                (click)="getFilteredHabitationList()">
+                                Search
+                            </button>
+                            <div fxFlex="2"></div>
+                            <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25">
+                            </mat-spinner>
+                        </div>
+                    </form>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 10px 45px 10px 15px;background: #fff;">
+            <div></div>
+            <div fxLayout="row" fxLayoutAlign="center center">
+                <button [disabled]="paginator.length > 15000 || isExportInProgress" mat-icon-button type="button"
+                    color="primary" (click)="downloadRecords()" title="Export is available upto 15,000 records."
+                    style="font-size: 16px">
+                    <mat-icon>save_alt</mat-icon>
+                    <span style="padding: 5px;">Export</span>
+                </button>
+                <mat-spinner *ngIf="isExportInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+            <div class="habitation-table">
+                <table mat-table #table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="district">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>District</th>
+                        <td mat-cell *matCellDef="let habitation">
+                            <p class="text-truncate">{{ habitation.district_name }}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="hud">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>HUD</th>
+                        <td mat-cell *matCellDef="let habitation">
+                            <p class="text-truncate">{{ habitation.hud_name }}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="block">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Block</th>
+                        <td mat-cell *matCellDef="let habitation">
+                            <p class="text-truncate">{{ habitation.block_name }}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="village">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Village</th>
+                        <td mat-cell *matCellDef="let habitation">
+                            <p class="text-truncate">{{ habitation.village_name }}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="habitation">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Habitation
+                        </th>
+                        <td mat-cell *matCellDef="let habitation">
+                            <p class="text-truncate">{{ habitation.habitation_name }}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="isActive">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>
+                            Active
+                        </th>
+                        <td mat-cell *matCellDef="let habitation" fxHide fxShow.gt-xs>
+                            <mat-icon *ngIf="habitation.active" class="active-icon green-600 s-16">check</mat-icon>
+                            <mat-icon *ngIf="!habitation.active" class="active-icon red-500 s-16">close</mat-icon>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>
+                            Edit
+                        </th>
+                        <td mat-cell *matCellDef="let data" fxHide fxShow.gt-xs>
+                            <button mat-icon-button type="button" color="primary" (click)="editHabitation(data)" [disabled]="disableEdit(data)">
+                                <mat-icon class="mr-16">create</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns" class="habitation"></tr>
+                </table>
+            </div>
+            <p style="text-align: center" *ngIf="paginator.length === 0">
+                No records found
+            </p>
+            <mat-divider></mat-divider>
+            <mat-paginator #paginator [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+        </div>
+
+    </div>
+</div>

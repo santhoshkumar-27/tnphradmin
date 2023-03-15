@@ -1,0 +1,33 @@
+@import "src/theme/breakpoints";
+// @import "src/am-form-light.scss";
+@import "src/am-form-black.scss";
+// @import "src/am-form-color.scss";
+// @import "src/am-form-yellow.scss";
+
+html, body { height: 100%; }
+body {
+    margin: 0;
+    font-family:'Courier New', Courier, monospace;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #f8f8fa;
+    text-align: left;
+    background-color: #FFD600;
+}
+
+body .grecaptcha-badge {
+    display: none !important;
+}
+
+// css for table in list pages
+table {
+    th.mat-header-cell {
+        color: #000;
+        font-size: 14px;
+    }
+
+    tr.mat-row p {
+        margin: 12px 0px;
+    }
+}

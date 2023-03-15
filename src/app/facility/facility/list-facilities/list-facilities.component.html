@@ -1,0 +1,340 @@
+<div id="facility" class="page-layout carded fullwidth inner-scroll">
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- HEADER -->
+        <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">
+
+            <!-- APP TITLE -->
+            <div class="logo mb-24 mb-md-0"
+                 fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="logo-icon s-32 mr-16">
+                    location_city
+                </mat-icon>
+                <span class="logo-text">
+                    Facility Mgmt.
+                </span>
+            </div>
+            <!-- / APP TITLE -->
+
+            <!-- ADD BUTTON -->
+            <ng-container>
+                <button mat-raised-button (click)="addFacility()" color="primary" class="add-shop-button mt-24 mt-md-0" fxShow fxHide.xs>
+                    <span>New Facility</span>
+                </button>
+                <button mat-icon-button (click)="addFacility()" color="primary" class="add-shop-button mt-24 mt-md-0" fxHide fxShow.xs>
+                    <mat-icon style="font-size: 18px;">add</mat-icon><mat-icon>location_city</mat-icon>
+                </button>
+            </ng-container>
+            <!-- / ADD BUTTON -->
+
+        </div>
+        <!-- / HEADER -->
+
+        <!-- Search form. -->
+        <div class="content-card">
+            <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true"
+                                     (closed)="panelOpenState = false" [expanded]="panelOpenState">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Search Panel
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <form fxLayout="column" [formGroup]="searchPanel">
+                      <!-- TODO change all below to dropdown -->
+                    <div fxFlex="1 0 auto" fxLayout="column">
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-form-field appearance="outline" fxFlex="49">
+                                <mat-label>District</mat-label>
+                                <input type="text"
+                                       placeholder="Select District"
+                                       aria-label="District"
+                                       matInput
+                                       formControlName="district"
+                                       [matAutocomplete]="district"
+                                       (blur)="onDistrictBlur()"
+                                       >
+                                <mat-autocomplete #district="matAutocomplete" [displayWith]="displayDistrictFn">
+                                   <mat-option *ngFor="let option of filteredDistricts | async" [value]="option">
+                                        {{option.district_name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                            <div fxFlex="2"></div>
+                            <mat-form-field appearance="outline" fxFlex="49">
+                                <mat-label>Block</mat-label>
+                                <input type="text"
+                                       placeholder="Select Block"
+                                       aria-label="Block"
+                                       matInput
+                                       formControlName="block"
+                                       [matAutocomplete]="block">
+                                <mat-autocomplete #block="matAutocomplete" [displayWith]="displayBlockFn">
+                                   <mat-option *ngFor="let option of filteredBlocks | async" [value]="option">
+                                        {{option.block_name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-form-field appearance="outline" fxFlex="49">
+                                <mat-label>Owner</mat-label>
+                                <input type="text"
+                                       placeholder="Select Owner"
+                                       aria-label="Owner"
+                                       matInput
+                                       formControlName="owner"
+                                       [matAutocomplete]="owner"
+                                       (blur)="onOwnerBlur()"
+                                       >
+                                <mat-autocomplete #owner="matAutocomplete" [displayWith]="displayOwnerFn">
+                                   <mat-option *ngFor="let option of filteredOwners | async" [value]="option">
+                                        {{option.owner_name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="searchPanel.get('owner')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                            </mat-form-field>
+                            <div fxFlex="2"></div>
+                            <mat-form-field appearance="outline" fxFlex="49">
+                                <mat-label>Directorate</mat-label>
+                                <input type="text"
+                                       placeholder="Select Directorate"
+                                       aria-label="Directorate"
+                                       matInput
+                                      formControlName="directorate"
+                                      [matAutocomplete]="directorate"
+                                      (blur)="onDirectorateBlur()"
+                                      >
+                                <mat-autocomplete #directorate="matAutocomplete" [displayWith]="displayDirectorateFn">
+                                   <mat-option *ngFor="let option of filteredDirectorates | async" [value]="option">
+                                        {{option.directorate_name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="searchPanel.get('directorate')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-form-field appearance="outline" fxFlex="49">
+                                <mat-label>Category</mat-label>
+                                <input type="text"
+                                       placeholder="Select Category"
+                                       aria-label="Category"
+                                       matInput
+                                       formControlName="category"
+                                       [matAutocomplete]="category"
+                                       (blur)="onCategoryBlur()"
+                                       >
+                                <mat-autocomplete #category="matAutocomplete" [displayWith]="displayCategoryFn">
+                                   <mat-option *ngFor="let option of filteredCategories | async" [value]="option">
+                                        {{option.category_name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="searchPanel.get('category')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                            </mat-form-field>
+                            <div fxFlex="2"></div>
+                            <mat-form-field appearance="outline" fxFlex="49">
+                                <mat-label>Type</mat-label>
+                                <input type="text"
+                                       placeholder="Select Type"
+                                       aria-label="Type"
+                                       matInput
+                                       formControlName="type"
+                                       [matAutocomplete]="type"
+                                       (blur)="onFacilityTypeBlur()"
+                                       >
+                                <mat-autocomplete #type="matAutocomplete" [displayWith]="displayTypeFn">
+                                   <mat-option *ngFor="let option of filteredTypes | async" [value]="option">
+                                        {{option.facility_type_name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="searchPanel.get('type')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-form-field appearance="outline" fxFlex="49">
+                                <mat-label>Level</mat-label>
+                                <input type="text"
+                                       placeholder="Select Level"
+                                       aria-label="Level"
+                                       matInput
+                                       formControlName="level"
+                                       [matAutocomplete]="level">
+                                <mat-autocomplete #level="matAutocomplete" [displayWith]="displayLevelFn">
+                                   <mat-option *ngFor="let option of filteredLevels | async" [value]="option">
+                                        {{option.facility_level_name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="searchPanel.get('level')?.hasError('Selected_Option_Not_In_List')">Select from given options</mat-error>
+                            </mat-form-field>
+                            <div fxFlex="2"></div>
+                            <mat-form-field appearance="outline" fxFlex="49">
+                                <mat-label>Facility Name</mat-label>
+                                <input matInput placeholder="Enter facility name" formControlName="facility_name">
+                            </mat-form-field>
+                        </div>
+                        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+                            <mat-form-field appearance="outline" fxFlex="49">
+                                <mat-label>Institution GID</mat-label>
+                                <input matInput placeholder="Enter Institution Gid" formControlName="institution_gid">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="center center">
+                        <button [disabled]="isCallInProgress" mat-raised-button type="button" color="primary" (click)="clearSearchFields()">
+                            Clear
+                        </button>
+                        <div fxFlex="2"></div>
+                        <button [disabled]="isCallInProgress" mat-raised-button type="button" color="primary"
+                            (click)="getFilteredFacilityList()">
+                            Search
+                        </button>
+                        <div fxFlex="2"></div>
+                        <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+                    </div>
+                </form>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 10px 45px 10px 15px;background: #fff;">
+                <div>
+                    <button *ngIf="selection.hasValue()" mat-icon-button type="button" color="primary" (click)="bulkEdit()">
+                        <mat-icon class="mr-16">create</mat-icon>
+                    </button>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="center center">
+                    <button [disabled]="isExportInProgress" mat-icon-button type="button" color="primary"
+                        (click)="downloadRecords()" style="font-size: 16px">
+                        <mat-icon>save_alt</mat-icon>
+                        <span style="padding: 5px;">Export</span>
+                    </button>
+                    <mat-spinner *ngIf="isExportInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+                </div>
+            </div>
+              
+            <mat-divider></mat-divider>
+        <!-- CONTENT CARD -->
+        <div class="content-card">
+            <div class="facility-table">
+                <table mat-table #table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()" [disabled]="disableMasterToggle()">
+                            </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox color="primary" (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row.facility_id) : null"
+                                [checked]="selection.isSelected(row.facility_id)" [disabled]="disableEdit(row)">
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="district">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>District</th>
+                        <td mat-cell *matCellDef="let facility">
+                            <p class="text-truncate">{{facility.district_id | districtIdToName | async}}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="hud">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Hud</th>
+                        <td mat-cell *matCellDef="let facility">
+                            <p class="text-truncate">{{facility.hud_id | hudIdToName | async}}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="block">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Block</th>
+                        <td mat-cell *matCellDef="let facility">
+                            <p class="text-truncate">{{facility.block_id | blockIdToName | async}}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="owner">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Owner</th>
+                        <td mat-cell *matCellDef="let facility">
+                            <p class="text-truncate">{{facility.owner_id | OwnerIdToName | async}}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="directorate">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Directorate</th>
+                        <td mat-cell *matCellDef="let facility">
+                            <p class="text-truncate">{{facility.directorate_id | DirectorateIdToName | async}}</p>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="category">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+                        <td mat-cell *matCellDef="let facility">
+                            <p class="text-truncate">{{facility.category_id | CategoryIdToName | async}}</p>
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="type">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+                        <td mat-cell *matCellDef="let facility">
+                            <p class="text-truncate">{{facility.facility_type_id | TypeIdToName | async}}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="level">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Level</th>
+                        <td mat-cell *matCellDef="let facility">
+                            <p class="text-truncate">{{facility.facility_level }}</p>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="facility">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Facility</th>
+                        <td mat-cell *matCellDef="let facility">
+                            <p class="text-truncate">{{facility.facility_name}}</p>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="isActive">
+                        <th
+                          mat-header-cell
+                          *matHeaderCellDef
+                          mat-sort-header
+                          fxHide
+                          fxShow.gt-xs
+                        >
+                          Active
+                        </th>
+                        <td mat-cell *matCellDef="let facility" fxHide fxShow.gt-xs>
+                          <mat-icon *ngIf="facility.active" class="active-icon green-600 s-16"
+                            >check</mat-icon
+                          >
+                          <mat-icon *ngIf="!facility.active" class="active-icon red-500 s-16"
+                            >close</mat-icon
+                          >
+                        </td>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Edit</th>
+                        <td mat-cell *matCellDef="let data" fxHide fxShow.gt-xs>
+                            <button mat-icon-button type="button" color="primary" (click)="editFacility(data)" [disabled]="disableEdit(data)">
+                                <mat-icon class="mr-16">create</mat-icon>
+                            </button>    
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="facility"></tr>
+                </table>
+            </div>
+            <p style= "text-align:center;" *ngIf="paginator.length === 0">No records found</p>
+            <mat-divider></mat-divider>
+            <mat-paginator #paginator
+                           [pageIndex]="0"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+
+        </div>
+        <!-- / CONTENT CARD -->
+    </div>
+    <!-- / CENTER -->
+</div>
+

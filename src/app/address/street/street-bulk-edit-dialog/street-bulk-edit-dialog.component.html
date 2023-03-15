@@ -1,0 +1,134 @@
+<div mat-dialog-title>Edit Street Details</div>
+<div mat-dialog-content>
+    <form [formGroup]="streetDetails" fxLayout="column">
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field appearance="outline" fxFlex="49"
+                matTooltip="To update ward, select the streets from single village."
+                [matTooltipDisabled]="data?.villageIds?.length == 1" matTooltipPosition="right">
+                <mat-label>Ward</mat-label>
+                <input matInput formControlName="ward_number">
+                <mat-error *ngIf="streetDetails.get('ward_number')?.hasError('pattern')">
+                    Invalid pattern.
+                </mat-error>
+            </mat-form-field>
+            <div fxFlex="2"></div>
+            <mat-form-field appearance="outline" fxFlex="49">
+                <mat-label>Pincode</mat-label>
+                <input matInput formControlName="pincode">
+                <mat-error *ngIf="streetDetails.get('pincode')?.hasError('required')">
+                    This field is required.
+                </mat-error>
+                <mat-error *ngIf="streetDetails.get('pincode')?.hasError('pattern')">
+                    Invalid pattern.
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <div fxFlex="49" matTooltip="To update Catering Anganwadi, select the streets from single block."
+                [matTooltipDisabled]="data?.blockIds?.length == 1" matTooltipPosition="right">
+                <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Catering Anganwadi</mat-label>
+                    <input type="text" placeholder="Select Anganwadi" aria-label="Anganwadi" matInput
+                        formControlName="anganwadi" [matAutocomplete]="anganwadi">
+                    <mat-autocomplete #anganwadi="matAutocomplete" [displayWith]="displayAnganwadiFn">
+                        <mat-option *ngFor="let anganwadi of filteredAnganwadis | async" [value]="anganwadi">
+                            {{anganwadi.facility_name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="streetDetails.get('anganwadi')?.hasError('required')">
+                        This field is required.
+                    </mat-error>
+                    <mat-error *ngIf="streetDetails.get('anganwadi')?.hasError('Selected_Option_Not_In_List')">Select from
+                        given options</mat-error>
+                </mat-form-field>
+            </div>
+            <div fxFlex="2"></div>
+            <div fxFlex="49" matTooltip="To update Catering HSC, select the streets from single block."
+                [matTooltipDisabled]="data?.blockIds?.length == 1" matTooltipPosition="left">
+                <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Catering HSC</mat-label>
+                    <input type="text" placeholder="Select Facility" aria-label="Facility" matInput formControlName="facility"
+                        [matAutocomplete]="facility">
+                    <mat-autocomplete #facility="matAutocomplete" [displayWith]="displayFacilityFn">
+                        <mat-option *ngFor="let facility of filteredFacilities | async" [value]="facility">
+                            {{facility.facility_name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="streetDetails.get('facility')?.hasError('required')">
+                        This field is required.
+                    </mat-error>
+                    <mat-error *ngIf="streetDetails.get('facility')?.hasError('Selected_Option_Not_In_List')">Select from
+                        given options</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field appearance="outline" fxFlex="49">
+                <mat-label>Revenue Village</mat-label>
+                <input type="text" placeholder="Select Revenue Village" aria-label="RevVillage" matInput
+                    formControlName="revVillage" [matAutocomplete]="revVillage">
+                <mat-autocomplete #revVillage="matAutocomplete" [displayWith]="displayRevVillageFn">
+                    <mat-option *ngFor="let revVillage of filteredRevVillages | async" [value]="revVillage">
+                        {{revVillage.rev_village_name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="streetDetails.get('revVillage')?.hasError('required')">
+                    This field is required.
+                </mat-error>
+                <mat-error *ngIf="streetDetails.get('revVillage')?.hasError('Selected_Option_Not_In_List')">Select from
+                    given options</mat-error>
+            </mat-form-field>
+            <div fxFlex="2"></div>
+            <mat-form-field appearance="outline" fxFlex="49">
+                <mat-label>Assembly Constituency</mat-label>
+                <input type="text" placeholder="Select Assembly Constituency" aria-label="AssemblyConstituency" matInput
+                    formControlName="assConstituency" [matAutocomplete]="assConstituency">
+                <mat-autocomplete #assConstituency="matAutocomplete" [displayWith]="displayAssemblyConstituencyFn">
+                    <mat-option *ngFor="let assConstituency of filteredAssConstituency | async"
+                        [value]="assConstituency">
+                        {{assConstituency.assembly_constituency_name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="streetDetails.get('assConstituency')?.hasError('required')">
+                    This field is required.
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-form-field appearance="outline" fxFlex="49">
+                <mat-label>Parliamentary Constituency</mat-label>
+                <input type="text" placeholder="Select Parliamentary Constituency"
+                    aria-label="ParliamentaryConstituency" matInput formControlName="parConstituency"
+                    [matAutocomplete]="parConstituency">
+                <mat-autocomplete #parConstituency="matAutocomplete" [displayWith]="displayParliamentConstituencyFn">
+                    <mat-option *ngFor="let parConstituency of filteredParConstituency | async"
+                        [value]="parConstituency">
+                        {{parConstituency.parlimentary_constituency_name}}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-error *ngIf="streetDetails.get('parConstituency')?.hasError('required')">
+                    This field is required.
+                </mat-error>
+            </mat-form-field>
+            <div fxFlex="2"></div>
+            <mat-form-field appearance="outline" fxFlex="49">
+                <mat-label>Is Active</mat-label>
+                <mat-select formControlName="active">
+                    <mat-option value="Yes">Yes</mat-option>
+                    <mat-option value="No">No</mat-option>
+                </mat-select>
+                <mat-error>Active Status required!</mat-error>
+            </mat-form-field>
+        </div>
+        <div *ngIf="errMsg" fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
+            <mat-error>{{errMsg}}</mat-error>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto" style="margin-top: 24px">
+            <button type="button" mat-stroked-button mat-dialog-close style="margin-right: 16px"
+                [disabled]="isCallInProgress">Cancel</button>
+            <button type="submit" mat-flat-button color="primary" (click)="updateStreets()"
+                [disabled]="isCallInProgress">Save</button>
+            <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+        </div>
+    </form>
+</div>

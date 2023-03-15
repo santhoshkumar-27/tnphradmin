@@ -1,0 +1,215 @@
+<div id="ftp_mgmt" class="page-layout carded fullwidth inner-scroll">
+  <div class="center">
+    <div
+      class="header accent"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+    >
+      <div
+        class="logo mb-24 mb-md-0"
+        fxLayout="row"
+        fxLayoutAlign="start center"
+      >
+        <mat-icon class="logo-icon s-32 mr-16"> event </mat-icon>
+        <span class="logo-text"> FTP Management </span>
+      </div>
+    </div>
+    <div class="content-card">
+      <mat-accordion>
+        <mat-expansion-panel
+          (opened)="panelOpenState = true"
+          (closed)="panelOpenState = false"
+          [expanded]="panelOpenState"
+        >
+          <mat-expansion-panel-header>
+            <mat-panel-title> Search Panel </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form fxLayout="column" [formGroup]="searchPanel">
+            <div fxFlex="1 0 auto" fxLayout="column">
+              <div
+                fxLayout="row"
+                fxLayoutAlign="start center"
+                fxFlex="1 0 auto"
+              >
+                <mat-form-field appearance="outline" fxFlex="49">
+                  <mat-label>District</mat-label>
+                  <input
+                    type="text"
+                    placeholder="Select District"
+                    aria-label="district"
+                    matInput
+                    formControlName="district"
+                    [matAutocomplete]="district_auto"
+                    (blur)="onDistrictBlur()"
+                  />
+                  <mat-autocomplete
+                    #district_auto="matAutocomplete"
+                    [displayWith]="displayDistrictFn"
+                  >
+                    <mat-option
+                      *ngFor="let option of filteredDistricts | async"
+                      [value]="option"
+                    >
+                      {{ option.district_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error
+                    *ngIf="
+                      searchPanel
+                        .get('district')
+                        ?.hasError('Selected_Option_Not_In_List')
+                    "
+                    >Select from given options</mat-error
+                  >
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <mat-form-field appearance="outline" fxFlex="49">
+                  <mat-label>Block</mat-label>
+                  <input
+                    type="text"
+                    placeholder="Select Block"
+                    aria-label="Block"
+                    matInput
+                    formControlName="block"
+                    [matAutocomplete]="block"
+                    (blur)="onBlockBlur()"
+                  />
+                  <mat-autocomplete
+                    #block="matAutocomplete"
+                    [displayWith]="displayBlockFn"
+                  >
+                    <mat-option
+                      *ngFor="let option of filteredBlocks | async"
+                      [value]="option"
+                    >
+                      {{ option.block_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error
+                    *ngIf="
+                      searchPanel
+                        .get('block')
+                        ?.hasError('Selected_Option_Not_In_List')
+                    "
+                    >Select from given options</mat-error
+                  >
+                </mat-form-field>
+              </div>
+              <div
+                fxLayout="row"
+                fxLayoutAlign="start center"
+                fxFlex="1 0 auto"
+              >
+                <mat-form-field appearance="outline" fxFlex="49">
+                  <mat-label>PHC</mat-label>
+                  <input
+                    type="text"
+                    placeholder="Select PHC"
+                    aria-label="phc"
+                    matInput
+                    formControlName="phc"
+                    [matAutocomplete]="phc"
+                    (blur)="onPHCBlur()"
+                  />
+                  <mat-autocomplete
+                    #phc="matAutocomplete"
+                    [displayWith]="displayPHCFn"
+                  >
+                    <mat-option
+                      *ngFor="let option of filteredPhcs | async"
+                      [value]="option"
+                    >
+                      {{ option.facility_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error
+                    *ngIf="
+                      searchPanel
+                        .get('phc')
+                        ?.hasError('Selected_Option_Not_In_List')
+                    "
+                    >Select from given options</mat-error
+                  >
+                </mat-form-field>
+                <div fxFlex="2"></div>
+                <mat-form-field appearance="outline" fxFlex="49">
+                  <mat-label>HSC</mat-label>
+                  <input
+                    type="text"
+                    placeholder="Select HSC"
+                    aria-label="hsc"
+                    matInput
+                    formControlName="hsc"
+                    [matAutocomplete]="hsc"
+                    required
+                  />
+                  <mat-autocomplete
+                    #hsc="matAutocomplete"
+                    [displayWith]="displayHSCFn"
+                  >
+                    <mat-option
+                      *ngFor="let option of filteredHscs | async"
+                      [value]="option"
+                    >
+                      {{ option.facility_name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error
+                    *ngIf="
+                      searchPanel
+                        .get('hsc')
+                        ?.hasError('required')
+                    "
+                    >Please Select HSC</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      searchPanel
+                        .get('hsc')
+                        ?.hasError('Selected_Option_Not_In_List')
+                    "
+                    >Select from given options</mat-error
+                  >
+                </mat-form-field>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center center">
+                <button
+                  [disabled]="isCallInProgress"
+                  mat-raised-button
+                  type="button"
+                  color="primary"
+                  (click)="clearSearchFields()"
+                >
+                  Clear
+                </button>
+                <div fxFlex="2"></div>
+                <button
+                  [disabled]="isCallInProgress"
+                  mat-raised-button
+                  type="submit"
+                  color="primary"
+                  (click)="getFtpData()"
+                >
+                  Search
+                </button>
+                <mat-spinner
+                  *ngIf="isCallInProgress"
+                  class="progerss-spinner"
+                  [diameter]="25"
+                ></mat-spinner>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="content-card" *ngIf="ftpData" style="overflow: auto">
+      <app-calender-view
+        [ftpData]="ftpData"
+        [currentUser]="currentUser"
+        [hscFacilityId]="searchPanel.get('hsc')?.value.facility_id"
+      ></app-calender-view>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+@import "src/theme/breakpoints";
+app-topbar {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    z-index: 4;
+
+    &.below {
+        z-index: 2;
+    }
+
+    mat-toolbar {
+        position: relative;
+
+        .logo-icon {
+            width: 50px;
+            //padding-top: -1rem;
+            padding: 3px;
+        }
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+
+        .logo-text {
+          margin: 12px;
+          padding: 10px;
+          font-size: 18px;
+          font-weight: 400;
+          letter-spacing: 0.4px;
+          line-height: normal;
+          vertical-align: middle;
+        }        
+    }
+
+    .sign-in-button {
+        min-width: 64px;
+        height: 64px;
+
+        @include media-breakpoint('xs') {
+            height: 56px;
+        }
+    }
+
+    .sidenav-toggle-button {
+        min-width: 56px;
+        height: 56px;
+    }
+
+    .topbar-separator {
+        height: 64px;
+        width: 5px;
+
+        @include media-breakpoint('xs') {
+            height: 56px;
+        }
+    }
+}
