@@ -192,19 +192,19 @@
       "logLevel": "debug"
     },
     "/api/v1/admin_api_upsert_hud": {
-      "target": "http://142.132.206.93:8000",
+      "target": "http://142.132.206.93:8056",
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug"
     },
     "/api/v1/admin_api_upsert_rev_village": {
-      "target": "http://142.132.206.93:8000",
+      "target": "http://142.132.206.93:8059",
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug"
     },
     "/api/v1/admin_api_upsert_shop": {
-      "target": "http://142.132.206.93:8000",
+      "target": "http://142.132.206.93:8062",
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug"
@@ -222,7 +222,7 @@
       "logLevel": "debug"
     },
     "/api/v1/admin_api_upsert_street": {
-      "target": "http://142.132.206.93:8000",
+      "target": "http://142.132.206.93:8065",
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug"
@@ -240,13 +240,13 @@
       "logLevel": "debug"
     },
     "/api/v1/admin_api_upsert_taluk": {
-      "target": "http://142.132.206.93:8000",
+      "target": "http://142.132.206.93:8068",
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug"
     },
     "/api/v1/admin_api_upsert_village": {
-      "target": "http://142.132.206.93:8000",
+      "target": "http://142.132.206.93:8072",
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug"
@@ -282,7 +282,7 @@
       "logLevel": "debug"
     },
     "/api/v1/admin_api_validate_gid": {
-      "target": "http://142.132.206.93:8000",
+      "target": "http://142.132.206.93:8075",
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug"
