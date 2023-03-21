@@ -73,7 +73,7 @@ export class AuthService {
             this.currentUser.next(user);
 
             // Load all master data to local db.
-            // this.loadAllMasterDta();
+            this.loadAllMasterDta();
 
             return resp;
           } else {

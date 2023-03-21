@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import Dexie from 'dexie';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Constants } from 'src/app/config/constants/constants';
 import { ClinicMaster } from 'src/app/models/master-clinic';
@@ -27,12 +27,15 @@ import { AssemblyConstituency } from 'src/app/models/assembly-constituency';
 import { ParliamentConstituency } from 'src/app/models/parliament-constituency';
 import { StateMaster } from 'src/app/models/master_state';
 import { TalukMaster } from 'src/app/models/master_taluk';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MasterDataService {
   private baseUrl = environment.serviceApiBaseUrl;
+  facilityWait: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  isFacilityData = this.facilityWait.asObservable();
 
   constructor(
     private _http: HttpClient,
@@ -293,7 +296,7 @@ export class MasterDataService {
             //   });
             // }
           });
-
+          this.facilityWait.next(facilityList);
           this.addFacilitiesToDB(facilityList);
 
           return facilityList;
