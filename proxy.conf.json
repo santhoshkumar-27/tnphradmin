@@ -306,7 +306,7 @@
       "logLevel": "debug"
     },
     "/api/v1/admin_api_upsert_user": {
-      "target": "http://142.132.206.93:8080",
+      "target": "http://142.132.206.93:8071",
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug"
