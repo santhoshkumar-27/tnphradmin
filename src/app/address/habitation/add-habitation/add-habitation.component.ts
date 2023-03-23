@@ -314,6 +314,7 @@ export class AddHabitationComponent implements OnInit, CanComponentDeactivate {
       this.habitationDetails.get('district')?.valid
     ) {
       let selectedDistrict = this.habitationDetails.get('district')?.value;
+      console.log('the selected deistr is gicen as:', selectedDistrict);
       this.hudList = await this.habitationService.getHudListForDistrict(
         selectedDistrict.district_id
       );
@@ -349,21 +350,24 @@ export class AddHabitationComponent implements OnInit, CanComponentDeactivate {
   }
 
   async onHudBlur() {
-    if (
-      this.habitationDetails.get('hud')?.value &&
-      this.habitationDetails.get('hud')?.valid
-    ) {
-      let selectedHud = this.habitationDetails.get('hud')?.value;
-      this.blockList = await this.habitationService.getBlocksListForHud(
-        selectedHud.hud_id
-      );
-    } else {
+    console.log('the hud is givne as:');
+    
+    // if (
+    //   this.habitationDetails.get('hud')?.value &&
+    //   this.habitationDetails.get('hud')?.valid
+    // ) {
+    //   let selectedHud = this.habitationDetails.get('hud')?.value;
+    //   console.log('the selected hd is gicen as:', selectedHud);
+    //   this.blockList = await this.habitationService.getBlocksListForHud(
+    //     selectedHud.district_id
+    //   );
+    // } else {
       if (this.habitationDetails.get('district')?.value) {
         this.blockList = await this.habitationService.getBlockListForDistrict(
           this.habitationDetails.get('district')?.value?.district_id
         );
       } else this.blockList = await this.habitationService.getBlockList();
-    }
+    // }
     resetFormList(
       this.habitationDetails,
       'block',
@@ -382,6 +386,7 @@ export class AddHabitationComponent implements OnInit, CanComponentDeactivate {
       this.habitationDetails.get('block')?.valid
     ) {
       let selectedBlock = this.habitationDetails.get('block')?.value;
+      console.log('the block os given as:', selectedBlock);
       this.villageList = await this.habitationService.getVillageListForBlock(
         selectedBlock.block_id
       );

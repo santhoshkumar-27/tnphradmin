@@ -415,21 +415,21 @@ export class AddVillageComponent implements OnInit, CanComponentDeactivate {
   }
 
   async onHudBlur() {
-    if (
-      this.villageDetails.get('hud')?.value &&
-      this.villageDetails.get('hud')?.valid
-    ) {
-      let selectedHud = this.villageDetails.get('hud')?.value;
-      this.blockList = await this.villageService.getBlocksListForHud(
-        selectedHud.hud_id
-      );
-    } else {
+    // if (
+    //   this.villageDetails.get('hud')?.value &&
+    //   this.villageDetails.get('hud')?.valid
+    // ) {
+    //   let selectedHud = this.villageDetails.get('hud')?.value;
+    //   this.blockList = await this.villageService.getBlocksListForHud(
+    //     selectedHud.hud_id
+    //   );
+    // } else {
       if (this.villageDetails.get('district')?.value) {
         this.blockList = await this.villageService.getBlocksListForDistrict(
           this.villageDetails.get('district')?.value?.district_id
         );
       } else this.blockList = await this.villageService.getBlocksList();
-    }
+    // }
     resetFormList(
       this.villageDetails,
       'block',

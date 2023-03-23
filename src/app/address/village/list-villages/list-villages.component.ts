@@ -338,21 +338,21 @@ export class ListVillagesComponent implements AfterViewInit, OnInit {
   }
 
   async onHudBlur() {
-    if (
-      this.searchPanel.get('hud')?.value &&
-      this.searchPanel.get('hud')?.valid
-    ) {
-      let selectedHud = this.searchPanel.get('hud')?.value;
-      this.blockList = await this.villageService.getBlocksListForHud(
-        selectedHud.hud_id
-      );
-    } else {
+    // if (
+    //   this.searchPanel.get('hud')?.value &&
+    //   this.searchPanel.get('hud')?.valid
+    // ) {
+    //   let selectedHud = this.searchPanel.get('hud')?.value;
+    //   this.blockList = await this.villageService.getBlocksListForHud(
+    //     selectedHud.hud_id
+    //   );
+    // } else {
       if (this.searchPanel.get('district')?.value) {
         this.blockList = await this.villageService.getBlocksListForDistrict(
           this.searchPanel.get('district')?.value?.district_id
         );
       } else this.blockList = await this.villageService.getBlocksList();
-    }
+    // }
     resetFormList(
       this.searchPanel,
       'block',

@@ -813,21 +813,21 @@ export class AddStreetComponent implements OnInit, CanComponentDeactivate {
   }
 
   async onHudBlur() {
-    if (
-      this.streetDetails.get('hud')?.value &&
-      this.streetDetails.get('hud')?.valid
-    ) {
-      let selectedHud = this.streetDetails.get('hud')?.value;
-      this.blockList = await this.streetService.getBlocksListForHud(
-        selectedHud.hud_id
-      );
-    } else {
+    // if (
+    //   this.streetDetails.get('hud')?.value &&
+    //   this.streetDetails.get('hud')?.valid
+    // ) {
+    //   let selectedHud = this.streetDetails.get('hud')?.value;
+    //   this.blockList = await this.streetService.getBlocksListForHud(
+    //     selectedHud.hud_id
+    //   );
+    // } else {
       if (this.streetDetails.get('district')?.value) {
         this.blockList = await this.streetService.getBlocksListForDistrict(
           this.streetDetails.get('district')?.value?.district_id
         );
       } else this.blockList = await this.streetService.getBlocksList();
-    }
+    // }
     this.streetDetails.get('block')?.clearValidators();
     this.streetDetails
       .get('block')

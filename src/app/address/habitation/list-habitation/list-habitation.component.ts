@@ -312,21 +312,21 @@ export class ListHabitationComponent implements OnInit {
   }
 
   async onHudBlur() {
-    if (
-      this.searchPanel.get('hud')?.value &&
-      this.searchPanel.get('hud')?.valid
-    ) {
-      let selectedHud = this.searchPanel.get('hud')?.value;
-      this.blockList = await this.habitationService.getBlocksListForHud(
-        selectedHud.hud_id
-      );
-    } else {
+    // if (
+    //   this.searchPanel.get('hud')?.value &&
+    //   this.searchPanel.get('hud')?.valid
+    // ) {
+    //   let selectedHud = this.searchPanel.get('hud')?.value;
+    //   this.blockList = await this.habitationService.getBlocksListForHud(
+    //     selectedHud.hud_id
+    //   );
+    // } else {
       if (this.searchPanel.get('district')?.value) {
         this.blockList = await this.habitationService.getBlockListForDistrict(
           this.searchPanel.get('district')?.value?.district_id
         );
       } else this.blockList = await this.habitationService.getBlockList();
-    }
+    // }
     this.searchPanel.get('block')?.clearValidators();
     this.searchPanel
       .get('block')

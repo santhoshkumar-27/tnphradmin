@@ -1439,21 +1439,21 @@ export class AddFacilityComponent implements OnInit, CanComponentDeactivate {
   }
 
   async onHudBlur() {
-    if (
-      this.facilityDetails.get('hud')?.value &&
-      this.facilityDetails.get('hud')?.valid
-    ) {
-      let selectedHud = this.facilityDetails.get('hud')?.value;
-      this.blockList = await this._service.getBlocksListForHud(
-        selectedHud.hud_id
-      );
-    } else {
+    // if (
+    //   this.facilityDetails.get('hud')?.value &&
+    //   this.facilityDetails.get('hud')?.valid
+    // ) {
+    //   let selectedHud = this.facilityDetails.get('hud')?.value;
+    //   this.blockList = await this._service.getBlocksListForHud(
+    //     selectedHud.hud_id
+    //   );
+    // } else {
       if (this.facilityDetails.get('district')?.value) {
         this.blockList = await this._service.getBlocksListForDistrict(
           this.facilityDetails.get('district')?.value?.district_id
         );
       } else this.blockList = await this._service.getBlocksList();
-    }
+    // }
     this.facilityDetails.get('block')?.clearValidators();
     this.facilityDetails
       .get('block')
