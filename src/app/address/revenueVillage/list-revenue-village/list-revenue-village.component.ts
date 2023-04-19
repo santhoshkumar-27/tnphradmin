@@ -72,8 +72,8 @@ export class ListRevenueVillageComponent implements OnInit {
     this.dataSource = new RevenueVillageDataSource(this.revVillageService, this._snackBar);
 
     this.searchPanel = this._formBuilder.group({
-      district: [''],
-      taluk: [''],
+      district: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
+      taluk: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
       rev_village_name: ['', Validators.pattern('[0-9a-zA-Z .()_-]*')],
       rev_village_gid: ['', Validators.pattern('[0-9]*')],
     });

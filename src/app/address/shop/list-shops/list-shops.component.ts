@@ -75,7 +75,7 @@ export class ListShopsComponent implements AfterViewInit, OnInit {
     this.dataSource = new ShopDataSource(this.shopService);
 
     this.searchPanel = this._formBuilder.group({
-      district: ['', Validators.pattern('[a-zA-Z .()-]*')],
+      district: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
       taluk: ['', Validators.pattern('[a-zA-Z !()-]*')],
       shop_name: ['', Validators.pattern('[0-9a-zA-Z .!()-]*')],
       shop_code: ['', Validators.pattern('[0-9A-z]*')],

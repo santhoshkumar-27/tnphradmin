@@ -147,9 +147,9 @@ export class ListUsersComponent implements OnInit {
     this.dataSource = new UserDataSource(this._service);
 
     this.searchPanel = this._formBuilder.group({
-      district: [''],
-      block: [''],
-      facility: [''],
+      district: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
+      block: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
+      facility: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
       phr_role: ['', [selectedOptionObjectValidator(this.phrRoles, 'name')]],
       user_name: ['', Validators.pattern('[a-zA-z]*')],
       mobile_number: [

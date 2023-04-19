@@ -364,6 +364,12 @@
       "secure": false,
       "changeOrigin": true,
       "logLevel": "debug"
+    },
+    "/api/v1/admin_api_refresh_token": {
+      "target": "http://142.132.206.93:8076",
+      "secure": false,
+      "changeOrigin": true,
+      "logLevel": "debug"
     }
 }
 

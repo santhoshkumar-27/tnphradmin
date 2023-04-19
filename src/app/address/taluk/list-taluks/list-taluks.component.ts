@@ -75,7 +75,7 @@ export class ListTaluksComponent implements OnInit {
     this.dataSource = new TalukDataSource(this.talukService, this._snackBar);
 
     this.searchPanel = this._formBuilder.group({
-      district: [''],
+      district: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
       taluk_name: ['', Validators.pattern('[0-9a-zA-Z .()_-]*')],
       taluk_gid: ['', Validators.pattern('[0-9]*')],
     });

@@ -85,8 +85,8 @@ export class ListBlocksComponent implements AfterViewInit, OnInit {
     this.dataSource = new BlockDataSource(this.blockService, this._snackBar);
 
     this.searchPanel = this._formBuilder.group({
-      district: ['', Validators.pattern('[a-zA-z ]*')],
-      hud: ['', Validators.pattern('[a-zA-z ]*')],
+      district: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
+      hud: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
       block_name: ['', Validators.pattern('[0-9a-zA-Z .()_-]*')],
       block_gid: ['', Validators.pattern('[0-9]*')],
       block_type: [''],

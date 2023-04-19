@@ -89,10 +89,10 @@ export class ListHabitationComponent implements OnInit {
     this.dataSource = new HabitationDataSource(this.habitationService);
 
     this.searchPanel = this._formBuilder.group({
-      district: [''],
-      hud: [''],
-      block: [''],
-      village: [''],
+      district: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
+      hud: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
+      block: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
+      village: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
       habitation_name: ['', Validators.pattern('[0-9a-zA-Z .()_-]*')],
       habitation_gid: ['', Validators.pattern('[0-9]*')],
     });

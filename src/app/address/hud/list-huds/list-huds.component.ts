@@ -63,7 +63,7 @@ export class ListHudsComponent implements OnInit {
     this.dataSource = new HudDataSource(this.hudService);
 
     this.searchPanel = this._formBuilder.group({
-      district: [''],
+      district: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
       hud_name: ['', Validators.pattern('[0-9a-zA-Z .()_-]*')],
       hud_gid: ['', Validators.pattern('[0-9]*')],
     });
