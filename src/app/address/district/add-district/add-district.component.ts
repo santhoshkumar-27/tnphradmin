@@ -84,7 +84,7 @@ export class AddDistrictComponent implements OnInit,CanComponentDeactivate  {
     this.districtDetails = this._formBuilder.group({
       state: [
         this.district ? this.district.state_id : '',
-        [Validators.required],
+        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
       ],
       district_name: [
         this.district ? this.district.district_name : '',

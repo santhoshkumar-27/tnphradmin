@@ -86,7 +86,7 @@ export class AddVillageComponent implements OnInit, CanComponentDeactivate {
     this.villageDetails = this._formBuilder.group({
       district: [
         this.village ? this.village.district_id : '',
-        [Validators.required],
+        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
       ],
       hud: [this.village ? this.village.hud_id : '', [Validators.required]],
       block: [this.village ? this.village.block_id : '', [Validators.required]],

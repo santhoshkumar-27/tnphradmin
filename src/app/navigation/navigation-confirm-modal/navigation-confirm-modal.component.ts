@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navigation-confirm-modal',
@@ -8,7 +9,10 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class NavigationConfirmModalComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<NavigationConfirmModalComponent>) { }
+  constructor( public dialogRef: MatDialogRef<NavigationConfirmModalComponent>,
+               @Inject(MAT_DIALOG_DATA) public data: any) {
+                dialogRef.disableClose = true;
+              }
 
   ngOnInit(): void {
     this.dialogRef.updatePosition({ top: '30px'});

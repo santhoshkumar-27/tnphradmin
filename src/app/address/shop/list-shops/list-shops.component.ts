@@ -301,7 +301,7 @@ export class ListShopsComponent implements AfterViewInit, OnInit {
   disableMasterToggle() {
     // disable master checkbox when all records are having unallocated name
     const shops = this.dataSource.shopsSubject.value;
-    return shops.every((shop) =>
+    return shops?.every((shop) =>
       shop?.shop_name?.toLowerCase().includes('unallocated')
     );
   }

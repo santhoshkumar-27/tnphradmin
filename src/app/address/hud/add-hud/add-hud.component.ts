@@ -79,7 +79,7 @@ export class AddHudComponent implements OnInit, CanComponentDeactivate {
     }
 
     this.hudDetails = this._formBuilder.group({
-      district: ['', [Validators.required]],
+      district: ['', [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]],
       hud_name: [
         this.hud?.hud_name || '',
         [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')],

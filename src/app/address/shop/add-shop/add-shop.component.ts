@@ -113,9 +113,9 @@ export class AddShopComponent implements OnInit, CanComponentDeactivate {
     this.shopDetails = this._formBuilder.group({
       district: [
         this.shop ? this.shop.district : '',
-        [Validators.required, Validators.pattern('[A-Za-z ]*')],
+        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')],
       ],
-      taluk: [this.shop ? this.shop.taluk : '', [Validators.required]],
+      taluk: [this.shop ? this.shop.taluk : '', [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]],
       rev_village: ['', [Validators.required]],
       shop_name: [
         { value: this.shop ? this.shop.shop_name : '', disabled: this.isEdit },

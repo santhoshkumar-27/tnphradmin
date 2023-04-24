@@ -99,31 +99,31 @@ export class AddStreetComponent implements OnInit, CanComponentDeactivate {
     }
 
     this.streetDetails = this._formBuilder.group({
-      district: ['', [Validators.required]],
-      hud: ['', [Validators.required]],
-      block: ['', [Validators.required]],
+      district: ['', [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]],
+      hud: ['', [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]],
+      block: ['', [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]],
       village: [
         {
           value: '',
           disabled: true,
         },
-        [Validators.required],
-      ],
+        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')
+      ]],
       habitation: [
         {
           value: '',
           disabled: true,
         },
-        [Validators.required],
-      ],
+        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')
+      ]],
       facility: [
         {
           value: '',
           disabled: true,
         },
-        Validators.required,
+        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
       ],
-      street: [this.street ? this.street.street_name : '', Validators.required],
+      street: [this.street ? this.street.street_name : '', [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]],
       pincode: [
         this.street ? this.street.pincode : 0.0,
         [Validators.required, Validators.pattern('[1-9][0-9]{5}')],
