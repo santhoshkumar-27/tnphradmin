@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -19,6 +19,7 @@ export class AuthService {
   private baseUrl = environment.authApiBaseUrl;
   currentUser: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   md_progress_event: BehaviorSubject<any> = new BehaviorSubject<boolean>(false);
+  validToken: boolean = false;
 
   /**
    * Constructor
@@ -50,6 +51,20 @@ export class AuthService {
     return this._http.post<any>(`admin_api_sendotp`, request);
   }
 
+  validateToken() {
+    return this._http.get<any>(`admin_api_validate_token`).pipe(map((resp) => {
+          if (resp.message.includes('Invalid Token')) {
+            throw new HttpErrorResponse({
+              error: 'Invalid Token',
+              // headers: evt.headers,
+              status: 401,
+              statusText: 'Error',
+              // url: evt.url
+          })
+          }
+    }));
+  }
+
   ValidateOTP(mobileNumber: number, otp: number) {
     let request = {
       mobile_number: mobileNumber,
@@ -60,9 +75,9 @@ export class AuthService {
       .pipe(
         map((resp) => {
           console.log('OTP valiation success.' + resp);
-          if (resp.data && resp.data[0]) {
-            let user = User.mapJsonToUser(resp.data[0]['user_details']);
-            user.auth_token = resp.data[0]['token'];
+          if (resp.data) {
+            let user = User.mapJsonToUser(resp.data);
+            // user.auth_token = resp.data[0]['token'];
             //this._storageService.clearDatastore();
             this._storageService.clearTables();
             // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -88,6 +103,7 @@ export class AuthService {
   logout(fromFlag: string = '') {
     sessionStorage.removeItem(Constants.CURRENT_USER);
     sessionStorage.clear();
+    this.validToken = false;
     this.currentUser.next(null);
     this._storageService.clearTables();
     if (fromFlag === 'INVALID_LOGIN') {

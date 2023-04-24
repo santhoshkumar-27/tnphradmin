@@ -30,7 +30,9 @@ export class CanDeactivateGuardService
       const formChanged = component.canDeactivate();
       console.log(formChanged);
       if (formChanged) {
-        const dialogRef = this.dialog.open(NavigationConfirmModalComponent);
+        const dialogRef = this.dialog.open(NavigationConfirmModalComponent, {
+          data: { message: 'You have unsaved changes. Are you sure you want to leave this page?', invalidToken: false },
+        });
         return dialogRef.afterClosed().toPromise().then((result) => {
           return result == 'Yes' ? true : false;
         });

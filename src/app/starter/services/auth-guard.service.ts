@@ -19,7 +19,6 @@ export class AuthGuardService implements CanActivate {
     constructor(public _authService: AuthService, public _router: Router) {}
 
     canActivate(): boolean {
-        console.log("In Auth Guard")
         this.userSubscription = this._authService.currentUser.subscribe(user => {
             this.user = user;
         }); 

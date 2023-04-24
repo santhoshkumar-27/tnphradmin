@@ -694,9 +694,9 @@ export class AddUserComponent implements OnInit, CanComponentDeactivate {
     if (this.isEdit && _originalRecord) {
       let _originalUserRecord: User = JSON.parse(_originalRecord);
       let orgMobileNo = _originalUserRecord.mobile_number;
-      if (orgMobileNo != this._user.mobile_number) {
-        this._user.auth_token = null;
-      }
+      // if (orgMobileNo != this._user.mobile_number) {
+      //   this._user.auth_token = null;
+      // }
     }
 
     this._service
