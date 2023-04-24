@@ -1,14 +1,20 @@
 <div class="modal-container">
     <h2 mat-dialog-title>Confirmation</h2>
     <div mat-dialog-content>
-        You have unsaved changes. Are you sure you want to leave this page?
+        <!-- You have unsaved changes. Are you sure you want to leave this page? -->
+        {{data.message}}
     </div>
-    <div mat-dialog-actions>
+    <div mat-dialog-actions *ngIf="!(data.invalidToken)">
         <button mat-flat-button type="button" color="primary" (click)="closeDialog()">
             Yes
         </button>
         <button mat-stroked-button type="button" mat-dialog-close>
             No
+        </button>
+    </div>
+    <div mat-dialog-actions *ngIf="(data.invalidToken)" style="justify-content: end;">
+        <button mat-flat-button type="button" color="primary" (click)="closeDialog()">
+            Ok
         </button>
     </div>
 </div>

@@ -26,7 +26,6 @@ export class User
     date_of_joining: Date;
     has_displinary_action: boolean;
     last_login_time: Date;
-    auth_token: string | null;
     assigned_jurisdiction:JSON;
     block_id? : string;
     district_id? : string;

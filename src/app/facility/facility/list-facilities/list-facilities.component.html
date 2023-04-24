@@ -208,7 +208,7 @@
                 </div>
                 <div fxLayout="row" fxLayoutAlign="center center">
                     <button [disabled]="isExportInProgress" mat-icon-button type="button" color="primary"
-                        (click)="downloadRecords()" style="font-size: 16px">
+                        (click)="total_records=[];downloadRecords()" style="font-size: 16px">
                         <mat-icon>save_alt</mat-icon>
                         <span style="padding: 5px;">Export</span>
                     </button>

@@ -22,6 +22,7 @@ import { UtilService } from './services/util.service';
 import { NavigationModule } from './navigation/navigation.module';
 import { EntityService } from './services/entity.service';
 import { GlobalInterceptor } from './shared/Interceptor/global.interceptor';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { GlobalInterceptor } from './shared/Interceptor/global.interceptor';
     FlexLayoutModule,
 
     AngularMaterialModule,
+    MatDialogModule,
 
     LayoutModule,
     StarterModule,
