@@ -42,7 +42,8 @@ export class GlobalInterceptor implements HttpInterceptor {
     //   this.token = (this.currentUser as any).auth_token;
     // }
     const customReq = request.clone({
-      url: environment.devApiURL + request.url,
+      withCredentials: true,
+      url: environment.apiURL + request.url,
       // headers: request.headers.set("x-access-token", this.token),
     });
     return next.handle(customReq).pipe(
@@ -137,7 +138,8 @@ export class GlobalInterceptor implements HttpInterceptor {
     // const currUser = sessionStorage.getItem("current_user");
     // body.headers["x-access-token"] = sessionStorage.getItem("current_user");
     return req.clone({
-      url: environment.devApiURL + req.url,
+      withCredentials: true,
+      url: environment.apiURL + req.url,
       body: { ...body },
     });
   }
