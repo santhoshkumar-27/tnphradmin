@@ -119,11 +119,11 @@ export class AddShopComponent implements OnInit, CanComponentDeactivate {
       rev_village: ['', [Validators.required]],
       shop_name: [
         { value: this.shop ? this.shop.shop_name : '', disabled: this.isEdit },
-        Validators.required,
+        Validators.required,Validators.pattern('[0-9a-zA-Z .()_-]*')
       ],
       shop_code: [
         { value: this.shop ? this.shop.shop_code : '', disabled: this.isEdit },
-        Validators.required,
+        [Validators.required,Validators.pattern('[0-9a-zA-Z .()_-]*')]
       ],
       latitude: [
         this.shop ? this.shop.latitude : 0.0,
@@ -135,7 +135,7 @@ export class AddShopComponent implements OnInit, CanComponentDeactivate {
       ],
       street_name: [
         this.shop ? this.shop.street_name : '',
-        [Validators.required],
+        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
       ],
       village: [''],
       //street_gid: [this.shop ? this.shop.street_gid : 'None', Validators.required]

@@ -168,7 +168,7 @@
                   <input matInput formControlName="user_name" />
                 </mat-form-field>
                 <div fxFlex="2"></div>
-                <mat-form-field appearance="outline" fxFlex="32">
+                <mat-form-field appearance="outline" fxFlex="32" >
                   <mat-label>Mobile Number</mat-label>
                   <input matInput formControlName="mobile_number" />
                   <mat-error
@@ -195,7 +195,10 @@
                 fxFlex="1 0 auto"
                 class="multiselect"
               >
-                <mat-form-field appearance="outline" fxFlex="62">
+                <mat-form-field appearance="outline" fxFlex="62" [ngClass]="{
+                  'mat-form-field-invalid': this.searchPanel.get('role')?.errors?.
+                  Selected_Option_Not_In_List
+                }">
                   <mat-label>Role</mat-label>
 
                   <mat-chip-list #chipList aria-label="Role selection">

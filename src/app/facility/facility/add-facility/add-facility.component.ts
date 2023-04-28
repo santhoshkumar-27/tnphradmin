@@ -118,7 +118,7 @@ export class AddFacilityComponent implements OnInit, CanComponentDeactivate {
       district: ['', Validators.pattern('[0-9a-zA-Z .()_-]*')],
       hud: ['', Validators.pattern('[0-9a-zA-Z .()_-]*')],
       block: ['', Validators.pattern('[0-9a-zA-Z .()_-]*')],
-      owner: ['', [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]],
+      owner: ['', [Validators.required]],
       directorate: [{ value: '', disabled: true }, Validators.required],
       category: [{ value: '', disabled: true }, Validators.required],
       facility_type: [{ value: '', disabled: true }, Validators.required],

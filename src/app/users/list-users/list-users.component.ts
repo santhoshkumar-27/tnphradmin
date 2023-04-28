@@ -156,7 +156,7 @@ export class ListUsersComponent implements OnInit {
         '',
         [Validators.pattern('[0-9]*'), Validators.maxLength(10)],
       ],
-      role: [[]],
+      role: ['', [Validators.pattern(/[0-9a-zA-Z .!()_-]*/)]],
     });
 
     if (sessionStorage.getItem('user_filters'))

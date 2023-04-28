@@ -1,4 +1,4 @@
-import { Component, HostListener, Inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Subscription } from 'rxjs';
 import { adminMenu } from './config/navigation';
@@ -23,7 +23,9 @@ export class AppComponent {
    *
    * @param {AuthService} _authService
    */
-  constructor(private _authService: AuthService) {}
+  constructor(private _authService: AuthService, private _elementRef: ElementRef) {
+    this._elementRef.nativeElement.removeAttribute("ng-version");
+  }
 
   // -----------------------------------------------------------------------------------------------------
   // @ Lifecycle hooks

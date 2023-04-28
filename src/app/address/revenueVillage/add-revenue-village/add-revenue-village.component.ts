@@ -74,7 +74,7 @@ export class AddRevenueVillageComponent
     this.revVillageDetails = this._formBuilder.group({
       district: [
         this.revVillage ? this.revVillage.district_id : '',
-        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
+        [Validators.required]
       ],
       taluk: [
         this.revVillage ? this.revVillage.taluk_id : '',

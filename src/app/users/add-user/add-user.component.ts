@@ -259,19 +259,19 @@ export class AddUserComponent implements OnInit, CanComponentDeactivate {
       {
         user_first_name: [
           this._user ? this._user.user_first_name : '',
-          [Validators.required, Validators.pattern('[A-Za-z ]*')],
+          [Validators.required, Validators.pattern('[A-Za-z ]*'),Validators.pattern('[0-9a-zA-Z .!()_-]*')],
         ],
         user_last_name: [
           this._user ? this._user.user_last_name : '',
-          [Validators.required, Validators.pattern('[A-Za-z ]*')],
+          [Validators.required, Validators.pattern('[A-Za-z ]*'),Validators.pattern('[0-9a-zA-Z .!()_-]*')],
         ],
         user_title: [
           this._user ? this._user.user_title : '',
-          [Validators.required, selectedOptionValidator(this.titleOptions)],
+          [Validators.required, selectedOptionValidator(this.titleOptions),Validators.pattern('[0-9a-zA-Z .!()_-]*')],
         ],
         gender: [
           this._user ? this._user.gender : '',
-          [Validators.required, selectedOptionValidator(this.genderOptions)],
+          [Validators.required, selectedOptionValidator(this.genderOptions),Validators.pattern('[0-9a-zA-Z .!()_-]*')],
         ],
         mobile_number: [
           this._user ? this._user.mobile_number : '',
@@ -280,6 +280,7 @@ export class AddUserComponent implements OnInit, CanComponentDeactivate {
             Validators.maxLength(10),
             Validators.minLength(10),
             Validators.pattern('[0-9]*'),
+            Validators.pattern('[0-9a-zA-Z .!()_-]*')
           ],
         ],
         email: [
@@ -288,6 +289,7 @@ export class AddUserComponent implements OnInit, CanComponentDeactivate {
             Validators.required,
             Validators.email,
             Validators.pattern(Constants.EMAIL_PATTERN),
+            // Validators.pattern('[0-9a-zA-Z .!()_-]*')
           ],
         ],
         // alt_mobile_number: [
@@ -334,16 +336,19 @@ export class AddUserComponent implements OnInit, CanComponentDeactivate {
             Validators.required,
             Validators.pattern('[A-Z0-9]*'),
             Validators.maxLength(15),
+            Validators.pattern('[0-9a-zA-Z .!()_-]*')
           ],
         ],
         //employee_id_type: [this._user ? this._user.employee_id_type : ''],
         employee_type: [
           this._user ? this._user.employee_type : '',
           Validators.required,
+          // Validators.pattern('[0-9a-zA-Z .!()_-]*')
         ],
         nature_of_work: [
           this._user ? this._user.nature_of_work : '',
           Validators.required,
+          // Validators.pattern('[0-9a-zA-Z .!()_-]*')
         ],
         //promotion_hierarchy: [this._user ? this._user.promotion_hierarchy : ''],
         // seniority_id: [
@@ -362,13 +367,15 @@ export class AddUserComponent implements OnInit, CanComponentDeactivate {
           [
             Validators.required,
             selectedOptionObjectValidator(this.phrRoles, 'name'),
+            Validators.pattern('[0-9a-zA-Z .!()_-]*')
           ],
         ],
         active: [
           this._user ? this.returnYesOrNo(this._user.active) : '',
           Validators.required,
+          // Validators.pattern('[0-9a-zA-Z .!()_-]*')
         ],
-        designation: [this._user ? this._user.designation : ''],
+        designation: [this._user ? this._user.designation : '',Validators.pattern('[0-9a-zA-Z .!()_-]*')],
         role: [this._user ? this._user.role : ''],
         facility_id: [
           this._user ? this._user.facility_id : '',

@@ -123,7 +123,7 @@ export class ListStreetsComponent implements AfterViewInit, OnInit {
         Validators.pattern('[0-9A-z]*'),
       ],
       street_name: ['', Validators.pattern('[0-9A-z ()-]*')],
-      street_gid: ['', Validators.pattern('[0-9A-z ()-]*')],
+      street_gid: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
     });
 
     if (sessionStorage.getItem('street_filters'))

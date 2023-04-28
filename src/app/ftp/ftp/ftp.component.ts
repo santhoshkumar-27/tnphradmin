@@ -62,10 +62,10 @@ export class FtpComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchPanel = this.formBuilder.group({
-      district: [''],
-      block: [''],
-      phc: [''],
-      hsc: ['', Validators.required],
+      district: ['', Validators.pattern('[0-9A-z .()@-]*')],
+      block: ['', Validators.pattern('[0-9A-z .()@-]*')],
+      phc: ['', Validators.pattern('[0-9A-z .()@-]*')],
+      hsc: ['', [Validators.required, Validators.pattern('[0-9A-z .()@-]*')]],
     });
 
     this._authService.currentUser.subscribe((user) => {

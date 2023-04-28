@@ -88,7 +88,7 @@ export class AddHabitationComponent implements OnInit, CanComponentDeactivate {
     this.habitationDetails = this._formBuilder.group({
       district: [
         this.habitation ? this.habitation.district_id : '',
-        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
+        [Validators.required]
       ],
       hud: [
         this.habitation ? this.habitation.hud_id : '',

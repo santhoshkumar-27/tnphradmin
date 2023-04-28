@@ -132,9 +132,9 @@ export class ListFacilitiesComponent implements OnInit {
       type: [{ value: '', disabled: true }, Validators.pattern('[0-9A-z ]*')],
       level: [{ value: '', disabled: true }, Validators.pattern('[0-9A-z ]*')],
       facility_name: ['', Validators.pattern('[0-9A-z .()@-]*')],
-      district: [''],
-      block: [''],
-      institution_gid: [''],
+      district: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
+      block: ['', Validators.pattern('[0-9a-zA-Z .!()_-]*')],
+      institution_gid: ['',Validators.pattern('[0-9a-zA-Z .!()_-]*')],
     });
 
     if (sessionStorage.getItem('facility_filters'))
