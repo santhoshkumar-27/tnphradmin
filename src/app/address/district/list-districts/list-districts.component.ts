@@ -11,6 +11,11 @@ import { DistrictService } from '../service/district.service';
 import { AuthService } from 'src/app/starter/services/auth.service';
 import { tap } from 'rxjs/operators';
 import { exportToExcel } from 'src/app/utils/exportToExcel.util';
+import { isBlockAdmin, isDistrictAdmin } from 'src/app/utils/session.util';
+import { MasterDataService } from 'src/app/starter/services/master-data.service';
+import { DistrictMaster } from 'src/app/models/master_district';
+import { optionObjectObjectValidator } from 'src/app/validators/searchSelect.validator';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -30,8 +35,8 @@ export class ListDistrictsComponent implements OnInit, AfterViewInit {
   district: District;
 
   dataSource: DistrictDataSource;
-  
-  filters : DistrictFilterType = {
+
+  filters: DistrictFilterType = {
     DISTRICT_NAME: null,
     DISTRICT_GID: null,
   };
@@ -54,7 +59,10 @@ export class ListDistrictsComponent implements OnInit, AfterViewInit {
 
   district_filters: any;
   isExportInProgress: boolean = false;
-  
+  street_filter: any;
+  districtList: DistrictMaster[];
+  filteredDistricts: Subject<DistrictMaster[]> = new Subject();
+
   constructor(
     private districtService: DistrictService,
     private _authService: AuthService,
@@ -62,7 +70,8 @@ export class ListDistrictsComponent implements OnInit, AfterViewInit {
     private _formBuilder: FormBuilder,
     private _router: Router,
     private _snackBar: MatSnackBar,
-  ) {}
+    private _masterDataService: MasterDataService,
+  ) { }
 
   ngOnInit(): void {
     this._authService.currentUser.subscribe((user) => {
@@ -97,6 +106,12 @@ export class ListDistrictsComponent implements OnInit, AfterViewInit {
     // this.getDistrictList();
     // this.getHudList();
     // this.onChanges();
+    if (sessionStorage.getItem('street_filters'))
+      this.street_filter = JSON.parse(
+        sessionStorage.getItem('street_filters')!
+      );
+    this.getDistrictList();
+    this.onChanges();
   }
 
   ngAfterViewInit() {
@@ -143,11 +158,11 @@ export class ListDistrictsComponent implements OnInit, AfterViewInit {
       console.log('list-district | getFilteredDistrictList()');
       this.isCallInProgress = true;
 
-      let _filters : DistrictFilterType = {
+      let _filters: DistrictFilterType = {
         DISTRICT_NAME:
           this.searchPanel.value['district_name'] ||
-          this.searchPanel.value['district_name'] != ''
-            ? this.searchPanel.value['district_name'].toLowerCase()
+            this.searchPanel.value['district_name'] != ''
+            ? this.searchPanel.value['district_name']['district_name'].toLowerCase()
             : null,
         DISTRICT_GID:
           this.searchPanel.value['district_gid'] != ''
@@ -220,7 +235,7 @@ export class ListDistrictsComponent implements OnInit, AfterViewInit {
           exportData.push({
             District: elem.district_name,
             District_GID: elem.district_gid,
-            Status: elem.active ? 'Active' : 'Inactive', 
+            Status: elem.active ? 'Active' : 'Inactive',
             Active: elem.active,
           });
         }
@@ -234,6 +249,41 @@ export class ListDistrictsComponent implements OnInit, AfterViewInit {
           duration: 4000,
         });
       });
+      
   }
-
+  getDistrictList() {
+    this._masterDataService.getDistrictsList().subscribe((districts: any) => {
+      this.districtList = districts;
+      let disField = this.searchPanel.get('district_name');
+      if (isDistrictAdmin(this.user) || isBlockAdmin(this.user)) {
+        let userDistrictObj = this.districtList.find(
+          (el: any) => el.district_id == this.user.district_id
+        );
+        disField?.setValue(userDistrictObj);
+        disField?.disable();
+      } else {
+        disField?.setValidators([
+          optionObjectObjectValidator(this.districtList, 'district_name'),
+        ]);
+        disField?.setValue(
+          this.street_filter?.district ? this.street_filter.district : ''
+        );
+      }
+    });
+  }
+  onChanges() {
+    this.searchPanel.get('district_name')?.valueChanges.subscribe((val: any) => {
+      const filterValue =
+        typeof val === 'object'
+          ? val.district_name.toLowerCase()
+          : val.toLowerCase();
+      let filteredOne = this.districtList.filter((dis: any) =>
+        dis.district_name.toLowerCase().includes(filterValue)
+      );
+      this.filteredDistricts.next(filteredOne);
+    });
+  }
+  displayDistrictFn(district?: any) {
+    return district ? district.district_name : '';
+  }
 }

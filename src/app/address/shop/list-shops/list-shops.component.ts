@@ -13,11 +13,15 @@ import { Shop } from '../../../models/shop';
 import { ShopService } from '../service/shop.service';
 import { ShopDataSource } from './shop.datasource';
 import { exportToExcel } from '../../../utils/exportToExcel.util';
-import { isBlockAdmin } from 'src/app/utils/session.util';
+import { isBlockAdmin, isDistrictAdmin } from 'src/app/utils/session.util';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ShopBulkEditComponent } from '../shop-bulk-edit/shop-bulk-edit.component';
 import { disableEdit } from 'src/app/utils/unallocated.util';
+import { Subject } from 'rxjs';
+import { DistrictMaster } from 'src/app/models/master_district';
+import { MasterDataService } from 'src/app/starter/services/master-data.service';
+import { optionObjectObjectValidator } from 'src/app/validators/searchSelect.validator';
 
 @Component({
   selector: 'app-list-shops',
@@ -58,14 +62,18 @@ export class ListShopsComponent implements AfterViewInit, OnInit {
   selection = new SelectionModel<any>(true, []);
 
   isExportInProgress: boolean = false;
+  street_filter: any;
+  districtList: DistrictMaster[];
+  filteredDistricts: Subject<DistrictMaster[]> = new Subject();
 
   constructor(
     private shopService: ShopService,
     private _authService: AuthService,
+    private _masterDataService: MasterDataService,
     private _formBuilder: FormBuilder,
     private _router: Router,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this._authService.currentUser.subscribe((user) => {
@@ -106,8 +114,51 @@ export class ListShopsComponent implements AfterViewInit, OnInit {
         this.searchPanel.get('district')?.disable();
       });
     }
+    if (sessionStorage.getItem('street_filters'))
+      this.street_filter = JSON.parse(
+        sessionStorage.getItem('street_filters')!
+      );
+    this.getDistrictList();
+    this.onChanges();
   }
-
+  getDistrictList() {
+    this._masterDataService.getDistrictsList().subscribe((districts: any) => {
+      this.districtList = districts;
+      let disField = this.searchPanel.get('district');
+      if (isDistrictAdmin(this.user) || isBlockAdmin(this.user)) {
+        let userDistrictObj = this.districtList.find(
+          (el: any) => el.district_id == this.user.district_id
+        );
+        disField?.setValue(userDistrictObj);
+        disField?.disable();
+      } else {
+        disField?.setValidators([
+          optionObjectObjectValidator(this.districtList, 'district_name'),
+        ]);
+        disField?.setValue(
+          this.street_filter?.district ? this.street_filter.district : ''
+        );
+      }
+    });
+  }
+  onChanges() {
+    this.searchPanel.get('district')?.valueChanges.subscribe((val: any) => {
+      const filterValue =
+        typeof val === 'object'
+          ? val.district_name.toLowerCase()
+          : val.toLowerCase();
+      let filteredOne = this.districtList.filter((dis: any) =>
+        dis.district_name.toLowerCase().includes(filterValue)
+      );
+      this.filteredDistricts.next(filteredOne);
+    });
+  }
+  displayDistrictFn(district?: any) {
+    return district ? district.district_name : '';
+  }
+  onDistrictBlur() {
+    if (this.searchPanel.get('district')?.invalid) return;
+  }
   ngAfterViewInit() {
     console.log('list-shop-ngAfterViewInit:', this.paginator);
     //this.paginator.pageSize = 100;
@@ -155,7 +206,7 @@ export class ListShopsComponent implements AfterViewInit, OnInit {
       // using get method in district bcoz district field can be in disable mode
       let _filters = {
         DISTRICT: this.searchPanel.get('district')?.value
-          ? this.searchPanel.get('district')?.value.toLowerCase()
+          ? this.searchPanel.get('district')?.value.district_name.toLowerCase()
           : null,
         TALUK: this.searchPanel.value['taluk']
           ? this.searchPanel.value['taluk'].toLowerCase()

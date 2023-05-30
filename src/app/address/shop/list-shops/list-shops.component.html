@@ -58,7 +58,14 @@
                             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
                                 <mat-form-field appearance="outline" fxFlex="49">
                                     <mat-label>District</mat-label>
-                                    <input matInput formControlName="district">
+                                    <input type="text" placeholder="Select District" aria-label="District" matInput
+                                        formControlName="district" (blur)="onDistrictBlur()"
+                                        [matAutocomplete]="district">
+                                    <mat-autocomplete #district="matAutocomplete" [displayWith]="displayDistrictFn">
+                                        <mat-option *ngFor="let option of filteredDistricts | async" [value]="option">
+                                            {{ option.district_name }}
+                                        </mat-option>
+                                    </mat-autocomplete>
                                 </mat-form-field>
                                 <div fxFlex="2"></div>
                                 <mat-form-field appearance="outline" fxFlex="49">
@@ -88,30 +95,31 @@
                                 (click)="getFilteredShopList()">
                                 Search
                             </button>
-                            <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+                            <mat-spinner *ngIf="isCallInProgress" class="progerss-spinner"
+                                [diameter]="25"></mat-spinner>
                         </div>
                     </form>
                 </mat-expansion-panel>
             </mat-accordion>
         </div>
 
-            <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 10px 45px 10px 15px;background: #fff;">
-                <div>
-                    <button *ngIf="selection.hasValue()" mat-icon-button type="button" color="primary" (click)="bulkEdit()">
-                        <mat-icon class="mr-16">create</mat-icon>
-                    </button>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="center center">
-                    <button [disabled]="isExportInProgress" mat-icon-button type="button" color="primary"
-                        (click)="downloadRecords()" style="font-size: 16px">
-                        <mat-icon>save_alt</mat-icon>
-                        <span style="padding: 5px;">Export</span>
-                    </button>
-                    <mat-spinner *ngIf="isExportInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
-                </div>
+        <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 10px 45px 10px 15px;background: #fff;">
+            <div>
+                <button *ngIf="selection.hasValue()" mat-icon-button type="button" color="primary" (click)="bulkEdit()">
+                    <mat-icon class="mr-16">create</mat-icon>
+                </button>
             </div>
-            
-            <mat-divider></mat-divider>
+            <div fxLayout="row" fxLayoutAlign="center center">
+                <button [disabled]="isExportInProgress" mat-icon-button type="button" color="primary"
+                    (click)="downloadRecords()" style="font-size: 16px">
+                    <mat-icon>save_alt</mat-icon>
+                    <span style="padding: 5px;">Export</span>
+                </button>
+                <mat-spinner *ngIf="isExportInProgress" class="progerss-spinner" [diameter]="25"></mat-spinner>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
         <!-- CONTENT CARD -->
         <div class="content-card">
             <div class="shops-table">
@@ -124,8 +132,8 @@
                         </th>
                         <td mat-cell *matCellDef="let row">
                             <mat-checkbox color="primary" (click)="$event.stopPropagation()"
-                                (change)="$event ? selection.toggle(row.shop_id) : null" [checked]="selection.isSelected(row.shop_id)"
-                                [disabled]="disableEdit(row)">
+                                (change)="$event ? selection.toggle(row.shop_id) : null"
+                                [checked]="selection.isSelected(row.shop_id)" [disabled]="disableEdit(row)">
                             </mat-checkbox>
                         </td>
                     </ng-container>
@@ -182,7 +190,8 @@
                     <ng-container matColumnDef="actions">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header fxHide fxShow.gt-xs>Edit</th>
                         <td mat-cell *matCellDef="let data" fxHide fxShow.gt-xs>
-                            <button mat-icon-button type="button" color="primary" (click)="editShop(data)" [disabled]="disableEdit(data)">
+                            <button mat-icon-button type="button" color="primary" (click)="editShop(data)"
+                                [disabled]="disableEdit(data)">
                                 <mat-icon class="mr-16">create</mat-icon>
                             </button>
                         </td>
