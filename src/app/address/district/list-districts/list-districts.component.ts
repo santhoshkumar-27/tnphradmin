@@ -94,11 +94,11 @@ export class ListDistrictsComponent implements OnInit, AfterViewInit {
         district_gid,
       } = this.district_filters;
       this.searchPanel.patchValue({
-        district_name: district_name ? district_name.toLowerCase() : '',
+        district_name: district_name ? district_name?.district_name.toLowerCase() : '',
         district_gid: district_gid || null,
       });
       this.filters = {
-        DISTRICT_NAME: district_name ? district_name.toLowerCase() : '',
+        DISTRICT_NAME: district_name ? district_name?.district_name.toLowerCase() : '',
         DISTRICT_GID: district_gid || null
       }
     }
