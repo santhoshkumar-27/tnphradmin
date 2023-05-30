@@ -16,6 +16,7 @@ import { disableEdit } from 'src/app/utils/unallocated.util';
 import { optionObjectObjectValidator } from 'src/app/validators/searchSelect.validator';
 import { RevenueVillageService } from '../service/revenue-village.service';
 import { RevenueVillageDataSource } from './revenue-village.datasource';
+import { isBlockAdmin, isDistrictAdmin } from 'src/app/utils/session.util';
 
 @Component({
   selector: 'app-list-revenue-village',
@@ -54,7 +55,6 @@ export class ListRevenueVillageComponent implements OnInit {
 
   talukList: TalukMaster[];
   filteredTaluks: Subject<TalukMaster[]> = new Subject();
-
   constructor(
     private revVillageService: RevenueVillageService,
     private _authService: AuthService,
@@ -62,7 +62,7 @@ export class ListRevenueVillageComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _router: Router,
     private _snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this._authService.currentUser.subscribe((user) => {
@@ -99,7 +99,6 @@ export class ListRevenueVillageComponent implements OnInit {
         REV_VILLAGE_GID: rev_village_gid || null,
       };
     }
-
     this.getDistrictList();
     this.getTalukList();
     this.onChanges();
@@ -110,18 +109,33 @@ export class ListRevenueVillageComponent implements OnInit {
       console.log('List rev village | district list:', values);
       // This feature applicable only for state admin
       this.districtList = values;
-      this.searchPanel
-        .get('district')
-        ?.addValidators([
+      let disField = this.searchPanel.get('district');
+      // this.searchPanel
+      //   .get('district')
+      //   ?.addValidators([
+      //     optionObjectObjectValidator(this.districtList, 'district_name'),
+      //   ]);
+      // this.searchPanel
+      //   .get('district')
+      //   ?.setValue(
+      //     this.rev_village_filters?.district
+      //       ? this.rev_village_filters.district
+      //       : ''
+      //   );
+      if (isDistrictAdmin(this.user) || isBlockAdmin(this.user)) {
+        let userDistrictObj = this.districtList.find(
+          (el: any) => el.district_id == this.user.district_id
+        );
+        disField?.setValue(userDistrictObj);
+        disField?.disable();
+      } else {
+        disField?.setValidators([
           optionObjectObjectValidator(this.districtList, 'district_name'),
         ]);
-      this.searchPanel
-        .get('district')
-        ?.setValue(
-          this.rev_village_filters?.district
-            ? this.rev_village_filters.district
-            : ''
+        disField?.setValue(
+          this.rev_village_filters?.district ? this.rev_village_filters.district : ''
         );
+      }
     });
   }
 
@@ -245,7 +259,7 @@ export class ListRevenueVillageComponent implements OnInit {
           this.searchPanel.get('district')?.value?.district_id || null,
         TALUK_ID:
           this.searchPanel.get('taluk')?.value ||
-          this.searchPanel.get('taluk')?.value != ''
+            this.searchPanel.get('taluk')?.value != ''
             ? this.searchPanel.get('taluk')?.value.taluk_id
             : null,
         REV_VILLAGE_NAME:
@@ -353,5 +367,5 @@ export class ListRevenueVillageComponent implements OnInit {
   disableEdit(data: RevenueVillage): boolean {
     return disableEdit(data?.rev_village_name);
   }
-  
+
 }
