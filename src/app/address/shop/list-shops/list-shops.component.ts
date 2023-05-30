@@ -22,6 +22,8 @@ import { Subject } from 'rxjs';
 import { DistrictMaster } from 'src/app/models/master_district';
 import { MasterDataService } from 'src/app/starter/services/master-data.service';
 import { optionObjectObjectValidator } from 'src/app/validators/searchSelect.validator';
+import { TalukMaster } from 'src/app/models/master_taluk';
+import { RevenueVillageService } from '../../revenueVillage/service/revenue-village.service';
 
 @Component({
   selector: 'app-list-shops',
@@ -63,12 +65,16 @@ export class ListShopsComponent implements AfterViewInit, OnInit {
 
   isExportInProgress: boolean = false;
   street_filter: any;
+  rev_village_filters: any;
   districtList: DistrictMaster[];
   filteredDistricts: Subject<DistrictMaster[]> = new Subject();
-
+  
+  talukList: TalukMaster[];
+  filteredTaluks: Subject<TalukMaster[]> = new Subject();
   constructor(
     private shopService: ShopService,
     private _authService: AuthService,
+    private revVillageService: RevenueVillageService,
     private _masterDataService: MasterDataService,
     private _formBuilder: FormBuilder,
     private _router: Router,
@@ -115,10 +121,14 @@ export class ListShopsComponent implements AfterViewInit, OnInit {
       });
     }
     if (sessionStorage.getItem('street_filters'))
-      this.street_filter = JSON.parse(
-        sessionStorage.getItem('street_filters')!
+      this.street_filter = JSON.parse(sessionStorage.getItem('street_filters')!);
+    if (sessionStorage.getItem('rev_village_filters')) {
+      this.rev_village_filters = JSON.parse(
+        sessionStorage.getItem('rev_village_filters')!
       );
+    }
     this.getDistrictList();
+    this.getTalukList();
     this.onChanges();
   }
   getDistrictList() {
@@ -141,6 +151,27 @@ export class ListShopsComponent implements AfterViewInit, OnInit {
       }
     });
   }
+  getTalukList() {
+    this._masterDataService.getTalukList().subscribe((values: Array<any>) => {
+      console.log('List rev village | taluk list:', values);
+      this.talukList = values;
+      if (this.rev_village_filters?.district) {
+        this.talukList = values.filter(
+          (el: any) => el.district_id == this.rev_village_filters.district.district_id
+        );
+      }
+      this.searchPanel
+        .get('taluk')
+        ?.addValidators([
+          optionObjectObjectValidator(this.talukList, 'taluk_name'),
+        ]);
+      this.searchPanel
+        .get('taluk')
+        ?.setValue(
+          this.rev_village_filters?.taluk ? this.rev_village_filters.taluk : ''
+        );
+    });
+  }
   onChanges() {
     this.searchPanel.get('district')?.valueChanges.subscribe((val: any) => {
       const filterValue =
@@ -152,12 +183,45 @@ export class ListShopsComponent implements AfterViewInit, OnInit {
       );
       this.filteredDistricts.next(filteredOne);
     });
+
+    this.searchPanel.get('taluk')?.valueChanges.subscribe((val: any) => {
+      const filterValue =
+        typeof val === 'object'
+          ? val.taluk_name.toLowerCase()
+          : val.toLowerCase();
+      let filteredOne = this.talukList.filter((taluk: any) =>
+        taluk.taluk_name.toLowerCase().includes(filterValue)
+      );
+      this.filteredTaluks.next(filteredOne);
+    });
   }
   displayDistrictFn(district?: any) {
     return district ? district.district_name : '';
   }
-  onDistrictBlur() {
-    if (this.searchPanel.get('district')?.invalid) return;
+  displayTalukFn(taluk: any) {
+    return taluk ? taluk.taluk_name : '';
+  }
+  async onDistrictBlur() {
+    if (
+      this.searchPanel.get('district')?.value &&
+      this.searchPanel.get('district')?.valid
+    ) {
+      let selectedDistrict = this.searchPanel.get('district')?.value;
+      this.talukList = await this.revVillageService.getTalukListperDistrict(
+        selectedDistrict.district_id
+      );
+    } else {
+      console.log('selected district is empty');
+      this.talukList = await this.revVillageService.getTalukList();
+    }
+    this.searchPanel.get('taluk')?.clearValidators();
+    this.searchPanel
+      .get('taluk')
+      ?.addValidators([
+        optionObjectObjectValidator(this.talukList, 'taluk_name'),
+      ]);
+    this.searchPanel.get('taluk')?.updateValueAndValidity();
+    this.searchPanel.get('taluk')?.setValue('');
   }
   ngAfterViewInit() {
     console.log('list-shop-ngAfterViewInit:', this.paginator);
@@ -209,7 +273,7 @@ export class ListShopsComponent implements AfterViewInit, OnInit {
           ? this.searchPanel.get('district')?.value.district_name.toLowerCase()
           : null,
         TALUK: this.searchPanel.value['taluk']
-          ? this.searchPanel.value['taluk'].toLowerCase()
+          ? this.searchPanel.value['taluk']['taluk_name'].toLowerCase()
           : null,
         SHOP_NAME: this.searchPanel.value['shop_name']
           ? this.searchPanel.value['shop_name'].toLowerCase()

@@ -70,7 +70,12 @@
                                 <div fxFlex="2"></div>
                                 <mat-form-field appearance="outline" fxFlex="49">
                                     <mat-label>Taluk</mat-label>
-                                    <input matInput formControlName="taluk">
+                                    <input matInput formControlName="taluk" [matAutocomplete]="taluk" />
+                                    <mat-autocomplete #taluk="matAutocomplete" [displayWith]="displayTalukFn">
+                                        <mat-option *ngFor="let option of filteredTaluks | async" [value]="option">
+                                            {{ option.taluk_name }}
+                                        </mat-option>
+                                    </mat-autocomplete>
                                 </mat-form-field>
                             </div>
                             <div fxLayout="row" fxLayoutAlign="start center" fxFlex="1 0 auto">
