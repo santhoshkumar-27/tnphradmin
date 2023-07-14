@@ -92,15 +92,15 @@ export class AddHabitationComponent implements OnInit, CanComponentDeactivate {
       ],
       hud: [
         this.habitation ? this.habitation.hud_id : '',
-        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
+        [Validators.required, Validators.pattern("[0-9a-zA-Z: -_{},']*")]
       ],
       block: [
         this.habitation ? this.habitation.block_id : '',
-        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
+        [Validators.required, Validators.pattern("[0-9a-zA-Z: -_{},']*")]
       ],
       village: [
         this.habitation ? this.habitation.village_id : '',
-        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
+        [Validators.required, Validators.pattern("[0-9a-zA-Z: -_{},']*")]
       ],
       habitation_name: [
         this.habitation?.habitation_name || '',

@@ -115,7 +115,7 @@ export class AddFacilityComponent implements OnInit, CanComponentDeactivate {
     }
 
     this.facilityDetails = this._formBuilder.group({
-      district: ['', Validators.pattern('[0-9a-zA-Z .()_-]*')],
+      district: ['', [Validators.required, Validators.pattern("[0-9a-zA-Z: -_{},']*")]],
       hud: ['', Validators.pattern('[0-9a-zA-Z .()_-]*')],
       block: ['', Validators.pattern('[0-9a-zA-Z .()_-]*')],
       owner: ['', [Validators.required]],

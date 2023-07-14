@@ -98,7 +98,7 @@ export class AddBlockComponent implements OnInit, CanComponentDeactivate {
         this.block ? this.block.district_id : '',
         [Validators.required],
       ],
-      hud: [this.block ? this.block.hud_id : '', [Validators.required,Validators.pattern('[0-9a-zA-Z .()_-]*')]],
+      hud: [this.block ? this.block.hud_id : '', [Validators.required, Validators.pattern("[0-9a-zA-Z: -_{},']*")]],
       block_name: [
         this.block ? this.block.block_name : '',
         [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')],

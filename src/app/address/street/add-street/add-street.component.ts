@@ -99,9 +99,9 @@ export class AddStreetComponent implements OnInit, CanComponentDeactivate {
     }
 
     this.streetDetails = this._formBuilder.group({
-      district: ['', [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]],
-      hud: ['', [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]],
-      block: ['', [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]],
+      district: ['', [Validators.required, Validators.pattern("[0-9a-zA-Z: -_{},']*")]],
+      hud: ['', [Validators.required, Validators.pattern("[0-9a-zA-Z: -_{},']*")]],
+      block: ['', [Validators.required, Validators.pattern("[0-9a-zA-Z: -_{},']*")]],
       village: [
         {
           value: '',

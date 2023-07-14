@@ -33,7 +33,7 @@ export class AddShopComponent implements OnInit, CanComponentDeactivate {
   title: string;
   isCallInProgress: boolean = false;
 
-  streetList: any;
+  streetList: any = [];
   filteredStreets: any = new Subject();
   villageList: any;
   filteredVillages: any = new Subject();
@@ -91,7 +91,14 @@ export class AddShopComponent implements OnInit, CanComponentDeactivate {
           ?.addValidators([
             optionObjectObjectValidator(this.villageList, 'village_name'),
           ]);
+        this.shopDetails.get('village')?.updateValueAndValidity();
         this.shopDetails.get('village')?.setValue('');
+        if (this.shop) {
+          const findObj = this.villageList.find((list: any) => list?.village_name.includes(this.shop.village));
+          if (findObj) {
+            this.shopDetails.get('village')?.setValue({ ...findObj });
+          }
+        }
       });
     } else {
       console.log('Shop Add : Navigating to login');
@@ -119,11 +126,11 @@ export class AddShopComponent implements OnInit, CanComponentDeactivate {
       rev_village: ['', [Validators.required]],
       shop_name: [
         { value: this.shop ? this.shop.shop_name : '', disabled: this.isEdit },
-        Validators.required,Validators.pattern('[0-9a-zA-Z .()_-]*')
+        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
       ],
       shop_code: [
         { value: this.shop ? this.shop.shop_code : '', disabled: this.isEdit },
-        [Validators.required,Validators.pattern('[0-9a-zA-Z .()_-]*')]
+        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
       ],
       latitude: [
         this.shop ? this.shop.latitude : 0.0,
@@ -135,13 +142,13 @@ export class AddShopComponent implements OnInit, CanComponentDeactivate {
       ],
       street_name: [
         this.shop ? this.shop.street_name : '',
-        [Validators.required, Validators.pattern('[0-9a-zA-Z .()_-]*')]
+        [Validators.required, Validators.pattern("[0-9a-zA-Z: -_{},']*")]
       ],
       village: [''],
       //street_gid: [this.shop ? this.shop.street_gid : 'None', Validators.required]
       active: [
         this.shop ? this.returnYesOrNo(this.shop.active) : '',
-        Validators.required,
+        [Validators.required],
       ],
     });
 
@@ -152,21 +159,23 @@ export class AddShopComponent implements OnInit, CanComponentDeactivate {
     if (this.shop?.rev_village_id)
       this.getRevVillageName(this.shop.rev_village_id);
 
-    // if(this.shop && this.shop.street_gid){
-    //   console.log('Retreiving street details from local db for:', this.shop.street_gid);
-    //   this._dataService.db.streets.get({street_gid: this.shop.street_gid}).then((streetDetails: any) => {
-    //     console.log('Retrieved street:', streetDetails);
-    //     this.shopDetails.patchValue({street_name: {street_name: streetDetails.street_name, street_id: streetDetails.street_id}});
-    //   }).catch((error: any)=> {
-    //     console.log('Error while retrieving street:', error);
-    //   });
-    // }
+    if (this.shop && this.shop.street_gid) {
+      console.log('Retreiving street details from local db for:', this.shop.street_gid);
+      this._dataService.db.streets.get({ street_gid: this.shop.street_gid }).then((streetDetails: any) => {
+        console.log('Retrieved street:', streetDetails);
+        if (streetDetails) {
+          this.shopDetails.patchValue({ street_name: { street_name: streetDetails.street_name, street_id: streetDetails.street_id, street_gid: this.shop.street_gid } });
+        }
+      }).catch((error: any) => {
+        console.log('Error while retrieving street:', error);
+      });
+    }
 
     this.onChanges();
   }
 
   async getRevVillageName(id) {
-    let revVillage =  await this._service.getRevVillageName(id);
+    let revVillage = await this._service.getRevVillageName(id);
     this.shopDetails.get('rev_village')?.setValue(revVillage);
   }
 
