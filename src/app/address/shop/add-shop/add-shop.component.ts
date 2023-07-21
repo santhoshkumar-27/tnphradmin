@@ -165,6 +165,9 @@ export class AddShopComponent implements OnInit, CanComponentDeactivate {
         console.log('Retrieved street:', streetDetails);
         if (streetDetails) {
           this.shopDetails.patchValue({ street_name: { street_name: streetDetails.street_name, street_id: streetDetails.street_id, street_gid: this.shop.street_gid } });
+        } else {
+          this.shopDetails.get('street_name')?.reset();
+          // this.shopDetails.get('street_name')?.reset();
         }
       }).catch((error: any) => {
         console.log('Error while retrieving street:', error);

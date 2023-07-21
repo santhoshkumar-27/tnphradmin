@@ -370,11 +370,11 @@ export class AddStreetComponent implements OnInit, CanComponentDeactivate {
         this.blockList = values;
       }
 
-      if (this.street?.hud_id) {
-        this.blockList = values.filter(
-          (el: any) => el.hud_id == this.street.hud_id
-        );
-      }
+      // if (this.street?.hud_id) {
+      //   this.blockList = values.filter(
+      //     (el: any) => el.hud_id == this.street.hud_id
+      //   );
+      // }
 
       if (isBlockAdmin(this.currentUser)) {
         let userBlockId = this.currentUser.block_id;
@@ -687,7 +687,7 @@ export class AddStreetComponent implements OnInit, CanComponentDeactivate {
     this.street.district_id =
       this.streetDetails.get('district')?.value.district_id;
     this.street.hud_id = this.streetDetails.get('hud')?.value.hud_id;
-    this.street.block_id = this.streetDetails.get('block')?.value.block_id;
+    this.street.block_id = this.streetDetails?.get('block')?.value.block_id;
 
     if (this.streetDetails.get('village')?.disabled) {
       this.street.village_id =
