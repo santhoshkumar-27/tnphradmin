@@ -836,7 +836,9 @@ export class AddStreetComponent implements OnInit, CanComponentDeactivate {
         optionObjectObjectValidator(this.blockList, 'block_name'),
       ]);
     this.streetDetails.get('block')?.updateValueAndValidity();
-    this.streetDetails.get('block')?.setValue('');
+    if (!isBlockAdmin(this.currentUser)) {
+      this.streetDetails.get('block')?.setValue('');
+    }
     this.onBlockBlur();
   }
 
@@ -941,17 +943,19 @@ export class AddStreetComponent implements OnInit, CanComponentDeactivate {
       // Fetch Anganwadis
       this.getAnganwadies(selectedBlock);
     } else {
-      this.villageList = [];
-      this.streetDetails.get('village')?.setValue('');
-      this.streetDetails.get('village')?.disable();
+      if (!isBlockAdmin(this.currentUser)) {
+        this.villageList = [];
+        this.streetDetails.get('village')?.setValue('');
+        this.streetDetails.get('village')?.disable();
+        this.facilityList = [];
+        this.streetDetails.get('facility')?.setValue('');
+        this.streetDetails.get('facility')?.disable();
+  
+        this.anganwadiList = [];
+        this.streetDetails.get('anganwadi')?.setValue('');
+        this.streetDetails.get('anganwadi')?.disable();
+      }
 
-      this.facilityList = [];
-      this.streetDetails.get('facility')?.setValue('');
-      this.streetDetails.get('facility')?.disable();
-
-      this.anganwadiList = [];
-      this.streetDetails.get('anganwadi')?.setValue('');
-      this.streetDetails.get('anganwadi')?.disable();
     }
   }
 
