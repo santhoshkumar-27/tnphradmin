@@ -390,6 +390,7 @@ export class AddShopComponent implements OnInit, CanComponentDeactivate {
         .subscribe((values: Array<any>) => {
           console.log('Street Add | Street list:', values);
           this.streetList = values;
+          this.filteredStreets.next(this.streetList);
           this.shopDetails.get('street_name')?.clearValidators();
           this.shopDetails
             .get('street_name')

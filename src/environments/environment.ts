@@ -8,6 +8,6 @@ export const environment = {
   authApiBaseUrl: 'https://devadmin.tnphr.in',
   serviceApiBaseUrl: 'https://devadmin.tnphr.in',
   recaptchaSiteKey: '6LfE5RMdAAAAAIWN4K98AIP3DU0ReXf2-95qLU04',
-  apiURL: 'http://newadmin.tnmtm.in/api/v1/',
+  apiURL: 'https://admin.phr.tn.gov.in/api/v1/',
   devApiURL: '/api/v1/'
 };
